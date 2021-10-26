@@ -2,13 +2,18 @@ package pl.gralak.librarysystem.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.gralak.librarysystem.entity.Book;
+import pl.gralak.librarysystem.exception.BookAlreadyExistException;
+import pl.gralak.librarysystem.exception.BookNotFoundException;
+import pl.gralak.librarysystem.exception.MissingTitleOrAuthorException;
 import pl.gralak.librarysystem.repository.BookRepo;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BookServiceImpl implements BookService
 {
     private final BookRepo bookRepo;
@@ -38,21 +43,46 @@ public class BookServiceImpl implements BookService
     }
 
     @Override
-    public Book addBook(Book book)
+    public Book addBook(Book bookToAdd)
     {
-        return bookRepo.save(book);
+        String title = bookToAdd.getTitle();
+        String author = bookToAdd.getAuthor();
+        if(title == null || title.length() == 0 || author == null || author.length() == 0)
+        {
+            throw new MissingTitleOrAuthorException();
+        }
+
+        Book book = bookRepo.findBookByTitleAndAuthor(title, author);
+        if(book != null)
+        {
+            throw new BookAlreadyExistException(title, author);
+        }
+        return bookRepo.save(bookToAdd);
     }
 
     @Override
     public Book getBookById(Long id)
     {
-        return bookRepo.getById(id);
+        return bookRepo.findById(id).orElseThrow(() -> new BookNotFoundException(id));
     }
 
     @Override
-    public Book updateBook(Book book)
+    public Book updateBook(Book bookForUpdate)
     {
-        return bookRepo.save(book);
+        String title = bookForUpdate.getTitle();
+        String author = bookForUpdate.getAuthor();
+        if(title == null || title.length() == 0 || author == null || author.length() == 0)
+        {
+            throw new MissingTitleOrAuthorException();
+        }
+
+        Book book = bookRepo.findBookByTitleAndAuthor(title, author);
+        if(book == null)
+        {
+            throw new BookNotFoundException(title, author);
+        }
+        bookForUpdate.setId(book.getId());
+        return bookRepo.save(bookForUpdate);
     }
 
     @Override

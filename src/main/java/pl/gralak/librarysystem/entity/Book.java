@@ -21,12 +21,11 @@ public class Book
     private String title;
     @Column(nullable = false)
     private String author;
-    @Column(nullable = false)
-    private LocalDate year;
 
+    private LocalDate year;
     private Classification bookSubject;
     private String location; // location in library
     private int booksAvailable; // number of books available in library
-    private boolean canBeOutside; // if book is available to hire outside the library
+    private boolean onlyInside; // if book is only available inside library
     private double rating;
 }
