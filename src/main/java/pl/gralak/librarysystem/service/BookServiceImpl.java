@@ -4,12 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.gralak.librarysystem.entity.Book;
+import pl.gralak.librarysystem.entity.Record;
 import pl.gralak.librarysystem.exception.BookAlreadyExistException;
 import pl.gralak.librarysystem.exception.BookNotFoundException;
 import pl.gralak.librarysystem.exception.MissingTitleOrAuthorException;
 import pl.gralak.librarysystem.repository.BookRepo;
+import pl.gralak.librarysystem.repository.RecordRepo;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import static pl.gralak.librarysystem.entity.Action.ADDED;
+import static pl.gralak.librarysystem.entity.Action.DELETED;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +23,7 @@ import java.util.List;
 public class BookServiceImpl implements BookService
 {
     private final BookRepo bookRepo;
+    private final RecordRepo recordRepo;
 
     @Override
     public List<Book> getAllBooks()
@@ -57,6 +64,10 @@ public class BookServiceImpl implements BookService
         {
             throw new BookAlreadyExistException(title, author);
         }
+
+        recordRepo.save(new Record(ADDED, bookToAdd.getTitle(), bookToAdd.getAuthor(),
+                bookToAdd.getNumberOfBooks(), LocalDate.now()));
+
         return bookRepo.save(bookToAdd);
     }
 
@@ -82,12 +93,28 @@ public class BookServiceImpl implements BookService
             throw new BookNotFoundException(title, author);
         }
         bookForUpdate.setId(book.getId());
+
+        if(book.getNumberOfBooks() > bookForUpdate.getNumberOfBooks())
+        {
+            recordRepo.save(new Record(DELETED, bookForUpdate.getTitle(), bookForUpdate.getAuthor(),
+                    book.getNumberOfBooks() - bookForUpdate.getNumberOfBooks(), LocalDate.now()));
+        }
+        else if (book.getNumberOfBooks() < bookForUpdate.getNumberOfBooks())
+        {
+            recordRepo.save(new Record(ADDED, bookForUpdate.getTitle(), bookForUpdate.getAuthor(),
+                    bookForUpdate.getNumberOfBooks() - book.getNumberOfBooks(), LocalDate.now()));
+        }
         return bookRepo.save(bookForUpdate);
     }
 
     @Override
     public void deleteBook(Long id)
     {
+        Book book = bookRepo.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+
+        recordRepo.save(new Record(DELETED, book.getTitle(), book.getAuthor(),
+                book.getNumberOfBooks(), LocalDate.now()));
+
         bookRepo.deleteById(id);
     }
 }

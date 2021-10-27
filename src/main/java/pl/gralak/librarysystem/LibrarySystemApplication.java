@@ -21,11 +21,11 @@ public class LibrarySystemApplication {
 
 			Book book1 = new Book();
 			book1.setTitle("Harry Potter And The Philosopher's Stone");
-			book1.setAuthor("J.K Rowling");
+			book1.setAuthor("JK Rowling");
 
 			Book book2 = new Book();
 			book2.setTitle("Harry Potter And The Chamber Of Secrets");
-			book2.setAuthor("J.K Rowling");
+			book2.setAuthor("JK Rowling");
 
 			bookServiceImpl.addBook(book1);
 			bookServiceImpl.addBook(book2);

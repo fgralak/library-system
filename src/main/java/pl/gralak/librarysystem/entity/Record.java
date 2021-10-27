@@ -11,22 +11,27 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Book
+public class Record
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(nullable = false)
+    private Action action;
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
     private String author;
+    @Column(nullable = false)
+    private int numberOfBooks;
+    private LocalDate date;
 
-    private LocalDate year;
-    private Classification bookSubject;
-    private String location; // location in library
-    private int numberOfBooks; // number of books owned by library
-    private int booksAvailable; // number of books available in library
-    private boolean onlyInside; // if book is only available inside library
-    private double rating;
+    public Record(Action action, String title, String author, int numberOfBooks, LocalDate date)
+    {
+        this.action = action;
+        this.title = title;
+        this.author = author;
+        this.numberOfBooks = numberOfBooks;
+        this.date = date;
+    }
 }

@@ -33,4 +33,12 @@ public class ExceptionAdvice
         Exception exception = new Exception(e.getMessage(), httpStatus, ZonedDateTime.now());
         return new ResponseEntity<>(exception, httpStatus);
     }
+
+    @ExceptionHandler(DateParseException.class)
+    public ResponseEntity<Exception> dateParseExceptionHandler(DateParseException e)
+    {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        Exception exception = new Exception(e.getMessage(), httpStatus, ZonedDateTime.now());
+        return new ResponseEntity<>(exception, httpStatus);
+    }
 }
