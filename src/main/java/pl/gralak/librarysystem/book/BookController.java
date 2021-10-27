@@ -1,11 +1,9 @@
-package pl.gralak.librarysystem.controller;
+package pl.gralak.librarysystem.book;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.gralak.librarysystem.entity.Book;
-import pl.gralak.librarysystem.service.BookServiceImpl;
 
 import java.util.List;
 

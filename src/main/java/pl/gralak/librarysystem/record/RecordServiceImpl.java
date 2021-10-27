@@ -1,10 +1,9 @@
-package pl.gralak.librarysystem.service;
+package pl.gralak.librarysystem.record;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.gralak.librarysystem.entity.Record;
+import org.springframework.transaction.annotation.Transactional;
 import pl.gralak.librarysystem.exception.DateParseException;
-import pl.gralak.librarysystem.repository.RecordRepo;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -12,6 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RecordServiceImpl implements RecordService
 {
     private final RecordRepo recordRepo;

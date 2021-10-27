@@ -1,21 +1,19 @@
-package pl.gralak.librarysystem.service;
+package pl.gralak.librarysystem.book;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.gralak.librarysystem.entity.Book;
-import pl.gralak.librarysystem.entity.Record;
 import pl.gralak.librarysystem.exception.BookAlreadyExistException;
 import pl.gralak.librarysystem.exception.BookNotFoundException;
 import pl.gralak.librarysystem.exception.MissingTitleOrAuthorException;
-import pl.gralak.librarysystem.repository.BookRepo;
-import pl.gralak.librarysystem.repository.RecordRepo;
+import pl.gralak.librarysystem.record.Record;
+import pl.gralak.librarysystem.record.RecordRepo;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static pl.gralak.librarysystem.entity.Action.ADDED;
-import static pl.gralak.librarysystem.entity.Action.DELETED;
+import static pl.gralak.librarysystem.record.Action.ADDED;
+import static pl.gralak.librarysystem.record.Action.DELETED;
 
 @Service
 @RequiredArgsConstructor

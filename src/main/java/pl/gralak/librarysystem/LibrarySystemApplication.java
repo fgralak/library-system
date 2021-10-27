@@ -4,8 +4,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import pl.gralak.librarysystem.entity.Book;
-import pl.gralak.librarysystem.service.BookServiceImpl;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.gralak.librarysystem.appuser.AppUser;
+import pl.gralak.librarysystem.appuser.AppUserRepo;
+import pl.gralak.librarysystem.book.Book;
+import pl.gralak.librarysystem.book.BookServiceImpl;
+
+import static pl.gralak.librarysystem.appuser.Provider.LOCAL;
+import static pl.gralak.librarysystem.appuser.Role.USER;
 
 @SpringBootApplication
 public class LibrarySystemApplication {
@@ -15,7 +21,9 @@ public class LibrarySystemApplication {
 	}
 
 	@Bean
-	CommandLineRunner commandLineRunner(BookServiceImpl bookServiceImpl)
+	CommandLineRunner commandLineRunner(BookServiceImpl bookServiceImpl,
+										AppUserRepo appUserRepo,
+										PasswordEncoder passwordEncoder)
 	{
 		return args -> {
 
@@ -29,6 +37,14 @@ public class LibrarySystemApplication {
 
 			bookServiceImpl.addBook(book1);
 			bookServiceImpl.addBook(book2);
+
+			AppUser user = new AppUser();
+			user.setUsername("user@user.com");
+			user.setPassword(passwordEncoder.encode("user"));
+			user.setRole(USER);
+			user.setAuthProvider(LOCAL);
+
+			appUserRepo.save(user);
 		};
 	}
 }

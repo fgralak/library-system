@@ -1,12 +1,10 @@
-package pl.gralak.librarysystem.controller;
+package pl.gralak.librarysystem.record;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pl.gralak.librarysystem.entity.Record;
-import pl.gralak.librarysystem.service.RecordServiceImpl;
 
 import java.util.List;
 

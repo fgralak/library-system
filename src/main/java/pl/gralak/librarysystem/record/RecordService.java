@@ -1,6 +1,4 @@
-package pl.gralak.librarysystem.service;
-
-import pl.gralak.librarysystem.entity.Record;
+package pl.gralak.librarysystem.record;
 
 import java.util.List;
 

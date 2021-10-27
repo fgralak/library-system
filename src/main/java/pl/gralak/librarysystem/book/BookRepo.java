@@ -1,9 +1,8 @@
-package pl.gralak.librarysystem.repository;
+package pl.gralak.librarysystem.book;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import pl.gralak.librarysystem.entity.Book;
 
 import java.util.List;
 

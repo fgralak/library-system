@@ -1,4 +1,4 @@
-package pl.gralak.librarysystem.entity;
+package pl.gralak.librarysystem.book;
 
 public enum Classification
 {
