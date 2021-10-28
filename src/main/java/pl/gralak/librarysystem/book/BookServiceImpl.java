@@ -3,7 +3,7 @@ package pl.gralak.librarysystem.book;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.gralak.librarysystem.exception.BookAlreadyExistException;
+import pl.gralak.librarysystem.exception.BookAlreadyExistsException;
 import pl.gralak.librarysystem.exception.BookNotFoundException;
 import pl.gralak.librarysystem.exception.MissingTitleOrAuthorException;
 import pl.gralak.librarysystem.record.Record;
@@ -60,7 +60,7 @@ public class BookServiceImpl implements BookService
         Book book = bookRepo.findBookByTitleAndAuthor(title, author);
         if(book != null)
         {
-            throw new BookAlreadyExistException(title, author);
+            throw new BookAlreadyExistsException(title, author);
         }
 
         recordRepo.save(new Record(ADDED, bookToAdd.getTitle(), bookToAdd.getAuthor(),

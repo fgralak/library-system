@@ -2,5 +2,5 @@ package pl.gralak.librarysystem.appuser;
 
 public enum Provider
 {
-    LOCAL
+    LOCAL, FACEBOOK, GOOGLE
 }

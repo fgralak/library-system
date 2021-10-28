@@ -16,15 +16,13 @@ public class AppUser
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String username;
-    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
     private Role role;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "auth_provider")
+    @Column(name = "auth_provider", nullable = false)
     private Provider authProvider;
 }

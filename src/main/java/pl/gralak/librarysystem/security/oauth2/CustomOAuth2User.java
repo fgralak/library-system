@@ -1,4 +1,4 @@
-package pl.gralak.librarysystem.oauth2;
+package pl.gralak.librarysystem.security.oauth2;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +11,7 @@ import java.util.Map;
 public class CustomOAuth2User implements OAuth2User
 {
     private final OAuth2User oAuth2User;
+    private final String oAuth2ClientName;
 
     @Override
     public Map<String, Object> getAttributes()
@@ -28,5 +29,15 @@ public class CustomOAuth2User implements OAuth2User
     public String getName()
     {
         return oAuth2User.getName();
+    }
+
+    public String getEmail()
+    {
+        return oAuth2User.getAttribute("email");
+    }
+
+    public String getOAuth2ClientName()
+    {
+        return this.oAuth2ClientName;
     }
 }
