@@ -49,7 +49,7 @@ public class TemplateController
                     "Value of username and/or password was null or empty");
             return "redirect:/sign-up";
         }
-        return "login";
+        return "account-created";
     }
 
     @GetMapping("/hello")

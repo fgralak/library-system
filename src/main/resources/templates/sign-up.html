@@ -1,19 +1,44 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Registration</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>Register account</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+        crossorigin="anonymous" />
 </head>
 <body>
-  <h1>Register</h1>
-  <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+<br>
+<div class="container-fluid text-center">
+  <div>
+    <img class="img-fluid" th:src="@{/images/library-icon.png}" width="150" height="150"/>
+  </div>
   <br>
-  <form th:action="@{/register}" method="post">
-    Username:
-    <input type="email" name="username" class="form-control" placeholder="e-mail">
-    Password:
-    <input type="password" name="password" class="form-control" placeholder="password">
-      <input type="submit" name="Sign up">
+  <form th:action="@{/register}" method="post" style="max-width: 400px; margin: 0 auto;">
+
+    <div th:if="${param.error}">
+      <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+    </div>
+
+    <div class="border border-secondary p-3 rounded">
+      <p style="font-size:25px;">Create your Library Account</p>
+      <p>
+        <input type="email" name="username" class="form-control" placeholder="E-mail" required autofocus/>
+      </p>
+      <p>
+        <input type="password" name="password" class="form-control" placeholder="Password" required autofocus/>
+      </p>
+      <p>
+        <input type="submit" value="Sign up" class="btn btn-primary" />
+      </p>
+    </div>
   </form>
+  <br>
+  <div class="border border-primary p-3 rounded" style="max-width: 250px; margin: 0 auto;">
+    <p>Already have an account?</p>
+    <a th:href="@{/login}"> Log in here</a>
+  </div>
+</div>
 </body>
 </html>
