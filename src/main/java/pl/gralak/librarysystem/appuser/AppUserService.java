@@ -12,8 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.gralak.librarysystem.exception.MissingUsernameOrPasswordException;
 import pl.gralak.librarysystem.exception.UserAlreadyExistsException;
+import pl.gralak.librarysystem.registration.token.ConfirmationToken;
+import pl.gralak.librarysystem.registration.token.ConfirmationTokenService;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.UUID;
 
 import static pl.gralak.librarysystem.appuser.Provider.LOCAL;
 
@@ -25,11 +29,12 @@ public class AppUserService implements UserDetailsService
 {
     private final AppUserRepo appUserRepo;
     private final PasswordEncoder passwordEncoder;
+    private final ConfirmationTokenService confirmationTokenService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
-        AppUser appUser = appUserRepo.findByUsername(username);
+        AppUser appUser = appUserRepo.findByUsernameAndProvider(username, LOCAL);
         if(appUser == null)
         {
             throw new UsernameNotFoundException("User cannot be found");
@@ -39,8 +44,9 @@ public class AppUserService implements UserDetailsService
             log.info("User found in the database: {}", username);
         }
 
-        return new User(appUser.getUsername(), appUser.getPassword(),
-                Collections.singleton(new SimpleGrantedAuthority(appUser.getRole().name())));
+        return new User(appUser.getUsername(), appUser.getPassword() ,appUser.isEnabled(),
+                appUser.isAccountNonExpired(), appUser.isCredentialsNonExpired(), appUser.isAccountNonLocked(),
+                Collections.singleton(new SimpleGrantedAuthority(appUser.getRole().name())) );
     }
 
     public void addOAuth2User(AppUser user)
@@ -52,19 +58,55 @@ public class AppUserService implements UserDetailsService
         appUserRepo.save(user);
     }
 
-    public void addLocalUser(AppUser user)
+    public String addLocalUser(AppUser user)
     {
         String username = user.getUsername();
-        if(appUserRepo.findByUsernameAndProvider(username, LOCAL) != null)
-        {
-            throw new UserAlreadyExistsException(username, LOCAL);
-        }
         if(username == null || username.length() == 0 || user.getPassword() == null || user.getPassword().length() == 0)
         {
             throw new MissingUsernameOrPasswordException();
         }
+
+        AppUser existedUser = appUserRepo.findByUsernameAndProvider(username, LOCAL);
+        if(existedUser != null)
+        {
+            if(!existedUser.isEnabled() && existedUser.getUsername().equals(user.getUsername()))
+            {
+                existedUser.setPassword(user.getPassword());
+                String token = UUID.randomUUID().toString();
+                ConfirmationToken confirmationToken = new ConfirmationToken();
+                confirmationToken.setToken(token);
+                confirmationToken.setCreatedAt(LocalDateTime.now());
+                confirmationToken.setExpiresAt(LocalDateTime.now().plusMinutes(15));
+                confirmationToken.setAppUser(existedUser);
+
+                confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+                return token;
+            }
+            else
+            {
+                throw new UserAlreadyExistsException(username, LOCAL);
+            }
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setAuthProvider(LOCAL);
         appUserRepo.save(user);
+
+        String token = UUID.randomUUID().toString();
+        ConfirmationToken confirmationToken = new ConfirmationToken();
+        confirmationToken.setToken(token);
+        confirmationToken.setCreatedAt(LocalDateTime.now());
+        confirmationToken.setExpiresAt(LocalDateTime.now().plusMinutes(15));
+        confirmationToken.setAppUser(user);
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        return token;
+    }
+
+    public void enableAppUser(String username)
+    {
+        appUserRepo.enableAppUser(username);
     }
 }

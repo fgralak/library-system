@@ -17,11 +17,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     @Override
     protected void configure(HttpSecurity http) throws Exception
     {
-        http.authorizeRequests().antMatchers("/", "/login", "/oauth/**", "/sign-up", "/register").permitAll();
+        http.authorizeRequests().antMatchers("/", "/login", "/oauth/**", "/sign-up", "/register","/registration/**").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
-        http.formLogin().loginPage("/login").usernameParameter("email").permitAll();
+        http.formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/hello");
         http.oauth2Login().loginPage("/login").userInfoEndpoint().userService(customOAuth2UserService)
-                .and().successHandler(oAuth2LoginSuccessHandler);
+                .and().successHandler(oAuth2LoginSuccessHandler).defaultSuccessUrl("/hello");
         http.logout().logoutSuccessUrl("/").permitAll();
     }
 }

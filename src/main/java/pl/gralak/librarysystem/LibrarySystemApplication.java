@@ -18,7 +18,7 @@ import static pl.gralak.librarysystem.appuser.Role.ROLE_USER;
 public class LibrarySystemApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LibrarySystemApplication.class, args);
+		SpringApplication.	run(LibrarySystemApplication.class, args);
 	}
 
 	@Bean
@@ -49,6 +49,7 @@ public class LibrarySystemApplication {
 			user.setPassword(passwordEncoder().encode("user"));
 			user.setRole(ROLE_USER);
 			user.setAuthProvider(LOCAL);
+			user.setEnabled(true);
 
 			appUserRepo.save(user);
 		};

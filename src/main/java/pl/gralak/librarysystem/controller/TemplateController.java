@@ -1,23 +1,24 @@
-package pl.gralak.librarysystem.login;
+package pl.gralak.librarysystem.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.gralak.librarysystem.appuser.AppUser;
-import pl.gralak.librarysystem.appuser.AppUserService;
 import pl.gralak.librarysystem.exception.MissingUsernameOrPasswordException;
 import pl.gralak.librarysystem.exception.UserAlreadyExistsException;
-
-import static pl.gralak.librarysystem.appuser.Role.ROLE_USER;
+import pl.gralak.librarysystem.registration.RegistrationRequest;
+import pl.gralak.librarysystem.registration.RegistrationService;
 
 @Controller
 @RequiredArgsConstructor
-public class LoginController
+public class TemplateController
 {
-    private final AppUserService appUserService;
+    private final RegistrationService registrationService;
 
     @GetMapping("/login")
     public String viewLoginPage()
@@ -35,14 +36,12 @@ public class LoginController
     @PostMapping("/register")
     public String register(AppUser user, RedirectAttributes redirectAttributes)
     {
-        user.setRole(ROLE_USER);
         try{
-            appUserService.addLocalUser(user);
+            registrationService.register(new RegistrationRequest(user.getUsername(), user.getPassword()));
         } catch(UserAlreadyExistsException e)
         {
             redirectAttributes.addFlashAttribute("error",
-                    "App User with username: " + user.getUsername() +
-                            ", provided by: " + user.getAuthProvider().name() + ", already exists");
+                    "App User with username: " + user.getUsername() + " already exists");
             return "redirect:/sign-up";
         } catch(MissingUsernameOrPasswordException e)
         {
@@ -51,6 +50,14 @@ public class LoginController
             return "redirect:/sign-up";
         }
         return "login";
+    }
+
+    @GetMapping("/hello")
+    public String hello(Model model)
+    {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("name", userDetails.getUsername());
+        return "hello";
     }
 }
 

@@ -36,6 +36,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         user.setUsername(email);
         user.setRole(ROLE_USER);
         user.setAuthProvider(Provider.valueOf(clientName.toUpperCase()));
+        user.setEnabled(true);
         try
         {
             appUserService.addOAuth2User(user);
