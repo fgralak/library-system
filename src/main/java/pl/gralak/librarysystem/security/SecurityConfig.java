@@ -23,6 +23,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         http.formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/hello");
         http.oauth2Login().loginPage("/login").userInfoEndpoint().userService(customOAuth2UserService)
                 .and().successHandler(oAuth2LoginSuccessHandler).defaultSuccessUrl("/hello");
-        http.logout().logoutSuccessUrl("/").permitAll();
+        http.logout().logoutUrl("/logout");
     }
 }

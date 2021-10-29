@@ -15,6 +15,9 @@
         <img class="img-fluid" th:src="@{/images/library-icon.png}" width="250" height="250"/>
     </div>
     <br>
+    <div class="alert alert-primary" role="alert" th:text="${success}" th:if="${success}"></div>
+    <br>
+
     <h1 style="color:brown; font-family:'Times', sans-serif; font-size:100px;">Hello in Library App</h1>
     <br>
     <div>

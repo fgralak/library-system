@@ -33,7 +33,7 @@ public class BookController
     }
 
     @GetMapping("/all-by-rating")
-    public ResponseEntity<List<Book>> getAllBooksWithBetterRating(@RequestParam int rating)
+    public ResponseEntity<List<Book>> getAllBooksWithBetterRating(@RequestParam double rating)
     {
         return new ResponseEntity<>(bookServiceImpl.getAllBooksWithBetterRating(rating), HttpStatus.OK);
     }

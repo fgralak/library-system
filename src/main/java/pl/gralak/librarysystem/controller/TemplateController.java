@@ -52,6 +52,7 @@ public class TemplateController
         return "account-created";
     }
 
+
     @GetMapping("/hello")
     public String hello(Model model)
     {
