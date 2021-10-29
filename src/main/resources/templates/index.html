@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Library App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous" />
+</head>
+<body>
+<br>
+<div class="container-fluid text-center">
+    <div>
+        <img class="img-fluid" th:src="@{/images/library-icon.png}" width="250" height="250"/>
+    </div>
+    <br>
+    <h1 style="color:brown; font-family:'Times', sans-serif; font-size:100px;">Hello in Library App</h1>
+    <br>
+    <div>
+        <a style="font-size:25px" th:href="@{/login}">Click here to log in or register your account</a>
+    </div>
+</div>
+</body>
+</html>
