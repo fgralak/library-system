@@ -21,9 +21,15 @@ public class AppUser implements UserDetails
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String username;
+    @Column(nullable = false)
     private String password;
 
+    private String firstName;
+    private String lastName;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
@@ -31,7 +37,8 @@ public class AppUser implements UserDetails
     @Column(name = "auth_provider", nullable = false)
     private Provider authProvider;
 
-    private boolean isEnabled;
+    @Column(nullable = false)
+    private boolean enabled;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities()
@@ -60,6 +67,6 @@ public class AppUser implements UserDetails
     @Override
     public boolean isEnabled()
     {
-        return isEnabled;
+        return enabled;
     }
 }

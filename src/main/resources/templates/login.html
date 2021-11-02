@@ -9,50 +9,50 @@
           crossorigin="anonymous" />
 </head>
 <body>
-<br>
-<div class="container-fluid text-center">
-    <div>
-        <img class="img-fluid" th:src="@{/images/library-icon.png}" width="150" height="150"/>
-    </div>
     <br>
-    <form th:action="@{/login}" method="post" style="max-width: 400px; margin: 0 auto;">
-
-        <div th:if="${param.error}">
-            <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+    <div class="container-fluid text-center">
+        <div>
+            <img class="img-fluid" th:src="@{/images/library-icon.png}" width="150" height="150"/>
         </div>
+        <br>
+        <form th:action="@{/login}" method="post" style="max-width: 400px; margin: 0 auto;">
 
-        <div th:if="${param.logout}">
-            <p class="text-success" style="font-size:20px;">You have been logged out.</p>
-        </div>
+            <div th:if="${param.error}">
+                <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+            </div>
 
-        <div class="border border-secondary p-3 rounded">
-            <p style="font-size:25px;">Log into your Library Account</p>
-            <p>
-                <input type="email" name="email" class="form-control" placeholder="E-mail" required autofocus/>
-            </p>
-            <p>
-                <input type="password" name="password" class="form-control" placeholder="Password" required autofocus/>
-            </p>
-            <p>
-                <input type="submit" value="Login" class="btn btn-primary" />
-            </p>
+            <div th:if="${param.logout}">
+                <p class="text-success" style="font-size:20px;">You have been logged out.</p>
+            </div>
+
+            <div class="border border-secondary p-3 rounded">
+                <p style="font-size:25px;">Log into your Library Account</p>
+                <p>
+                    <input type="email" name="email" class="form-control" placeholder="E-mail" required autofocus/>
+                </p>
+                <p>
+                    <input type="password" name="password" class="form-control" placeholder="Password" required autofocus/>
+                </p>
+                <p>
+                    <input type="submit" value="Login" class="btn btn-primary" />
+                </p>
+            </div>
+        </form>
+        <br>
+        <div>
+            <img class="img-fluid" th:src="@{/images/fb-icon.png}" width="50" height="50"/>
+            <a th:href="@{/oauth2/authorization/facebook}">Login with Facebook</a>
         </div>
-    </form>
-    <br>
-    <div>
-        <img class="img-fluid" th:src="@{/images/fb-icon.png}" width="50" height="50"/>
-        <a th:href="@{/oauth2/authorization/facebook}">Login with Facebook</a>
+        <br>
+        <div>
+            <img class="img-fluid" th:src="@{/images/google-icon.png}" width="50" height="50"/>
+            <a th:href="@{/oauth2/authorization/google}">Login with Google</a>
+        </div>
+        <br>
+        <div class="border border-primary p-3 rounded" style="max-width: 200px; margin: 0 auto;">
+            <p>New to Library App?</p>
+            <a th:href="@{/sign-up}"> Create an account</a>
+        </div>
     </div>
-    <br>
-    <div>
-        <img class="img-fluid" th:src="@{/images/google-icon.png}" width="50" height="50"/>
-        <a th:href="@{/oauth2/authorization/google}">Login with Google</a>
-    </div>
-    <br>
-    <div class="border border-primary p-3 rounded" style="max-width: 200px; margin: 0 auto;">
-        <p>New to Library App?</p>
-        <a th:href="@{/sign-up}"> Create an account</a>
-    </div>
-</div>
 </body>
 </html>

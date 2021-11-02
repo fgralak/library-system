@@ -12,7 +12,7 @@ import pl.gralak.librarysystem.book.Book;
 import pl.gralak.librarysystem.book.BookServiceImpl;
 
 import static pl.gralak.librarysystem.appuser.Provider.LOCAL;
-import static pl.gralak.librarysystem.appuser.Role.ROLE_USER;
+import static pl.gralak.librarysystem.appuser.Role.*;
 
 @SpringBootApplication
 public class LibrarySystemApplication {
@@ -51,7 +51,25 @@ public class LibrarySystemApplication {
 			user.setAuthProvider(LOCAL);
 			user.setEnabled(true);
 
+			AppUser employee = new AppUser();
+			employee.setFirstName("Kate");
+			employee.setLastName("Winslet");
+			employee.setUsername("employee@employee.com");
+			employee.setPassword(passwordEncoder().encode("employee"));
+			employee.setRole(ROLE_EMPLOYEE);
+			employee.setAuthProvider(LOCAL);
+			employee.setEnabled(true);
+
+			AppUser admin = new AppUser();
+			admin.setUsername("admin@admin.com");
+			admin.setPassword(passwordEncoder().encode("admin"));
+			admin.setRole(ROLE_ADMIN);
+			admin.setAuthProvider(LOCAL);
+			admin.setEnabled(true);
+
 			appUserRepo.save(user);
+			appUserRepo.save(employee);
+			appUserRepo.save(admin);
 		};
 	}
 }

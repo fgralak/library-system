@@ -12,14 +12,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.gralak.librarysystem.exception.MissingUsernameOrPasswordException;
 import pl.gralak.librarysystem.exception.UserAlreadyExistsException;
+import pl.gralak.librarysystem.exception.UserNotFoundException;
 import pl.gralak.librarysystem.registration.token.ConfirmationToken;
 import pl.gralak.librarysystem.registration.token.ConfirmationTokenService;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import static pl.gralak.librarysystem.appuser.Provider.LOCAL;
+import static pl.gralak.librarysystem.appuser.Role.ROLE_EMPLOYEE;
 
 @Service
 @RequiredArgsConstructor
@@ -108,5 +111,68 @@ public class AppUserService implements UserDetailsService
     public void enableAppUser(String username)
     {
         appUserRepo.enableAppUser(username);
+    }
+
+    public List<AppUser> getAllEmployees()
+    {
+        return appUserRepo.findAllEmployees();
+    }
+
+    public void addUserByAdmin(AppUser user)
+    {
+        String username = user.getUsername();
+        if(username == null || username.length() == 0 || user.getPassword() == null || user.getPassword().length() == 0)
+        {
+            throw new MissingUsernameOrPasswordException();
+        }
+
+        AppUser existedUser = appUserRepo.findByUsernameAndProvider(username, LOCAL);
+        if(existedUser != null)
+        {
+            throw new UserAlreadyExistsException(username, LOCAL);
+        }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setAuthProvider(LOCAL);
+        user.setRole(ROLE_EMPLOYEE);
+        user.setEnabled(true);
+        appUserRepo.save(user);
+    }
+
+    public AppUser getUserById(Long id)
+    {
+        return appUserRepo.findById(id).orElseThrow(() ->
+                new UserNotFoundException(id));
+    }
+
+    public void updateUserByAdmin(AppUser user)
+    {
+        String username = user.getUsername();
+        if(username == null || username.length() == 0 || user.getPassword() == null || user.getPassword().length() == 0)
+        {
+            throw new MissingUsernameOrPasswordException();
+        }
+
+        appUserRepo.save(user);
+    }
+
+    public void deleteUser(Long id)
+    {
+        if(appUserRepo.findById(id).isEmpty())
+        {
+            throw new UserNotFoundException(id);
+        }
+        appUserRepo.deleteById(id);
+    }
+
+    public void resetPassword(String password, Long id)
+    {
+        if(password == null || password.length() == 0)
+        {
+            throw new MissingUsernameOrPasswordException();
+        }
+        AppUser appUser = getUserById(id);
+        appUser.setPassword(passwordEncoder.encode(password));
+        appUserRepo.save(appUser);
     }
 }

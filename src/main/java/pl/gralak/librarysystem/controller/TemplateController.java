@@ -1,6 +1,7 @@
 package pl.gralak.librarysystem.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.gralak.librarysystem.appuser.AppUser;
+import pl.gralak.librarysystem.appuser.AppUserService;
 import pl.gralak.librarysystem.exception.MissingUsernameOrPasswordException;
 import pl.gralak.librarysystem.exception.UserAlreadyExistsException;
 import pl.gralak.librarysystem.registration.RegistrationRequest;
@@ -19,6 +21,7 @@ import pl.gralak.librarysystem.registration.RegistrationService;
 public class TemplateController
 {
     private final RegistrationService registrationService;
+    private final AppUserService appUserService;
 
     @GetMapping("/login")
     public String viewLoginPage()
@@ -30,7 +33,7 @@ public class TemplateController
     public String signUp(Model model)
     {
         model.addAttribute("user", new AppUser());
-        return "sign-up";
+        return "register/sign-up";
     }
 
     @PostMapping("/register")
@@ -49,16 +52,23 @@ public class TemplateController
                     "Value of username and/or password was null or empty");
             return "redirect:/sign-up";
         }
-        return "account-created";
+        return "register/account-created";
     }
 
-
-    @GetMapping("/hello")
-    public String hello(Model model)
+    @GetMapping("/menu")
+    public String userMenu(Model model)
     {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("name", userDetails.getUsername());
-        return "hello";
+        if(userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
+        {
+            return "menu/menu-admin";
+        } else if(userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_EMPLOYEE")))
+        {
+            return "menu/menu-employee";
+        } else
+        {
+            return "menu/menu-user";
+        }
     }
 }
-

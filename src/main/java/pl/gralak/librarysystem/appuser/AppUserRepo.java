@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface AppUserRepo extends JpaRepository<AppUser, Long>
 {
@@ -15,6 +17,10 @@ public interface AppUserRepo extends JpaRepository<AppUser, Long>
 
     @Transactional
     @Modifying
-    @Query("UPDATE AppUser a SET a.isEnabled = true WHERE a.username = ?1")
+    @Query("UPDATE AppUser a SET a.enabled = true WHERE a.username = ?1")
     void enableAppUser(String username);
+
+    @Transactional
+    @Query("SELECT a FROM AppUser a WHERE a.role = pl.gralak.librarysystem.appuser.Role.ROLE_EMPLOYEE")
+    List<AppUser> findAllEmployees();
 }

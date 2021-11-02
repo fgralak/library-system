@@ -43,9 +43,17 @@ public class ExceptionAdvice
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<Exception> userAlreadyExistHandler(UserAlreadyExistsException e)
+    public ResponseEntity<Exception> userAlreadyExistsHandler(UserAlreadyExistsException e)
     {
         HttpStatus httpStatus = HttpStatus.CONFLICT;
+        Exception exception = new Exception(e.getMessage(), httpStatus, ZonedDateTime.now());
+        return new ResponseEntity<>(exception, httpStatus);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Exception> userNotFoundHandler(UserNotFoundException e)
+    {
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
         Exception exception = new Exception(e.getMessage(), httpStatus, ZonedDateTime.now());
         return new ResponseEntity<>(exception, httpStatus);
     }

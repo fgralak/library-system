@@ -20,9 +20,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         http.authorizeRequests().antMatchers("/", "/login", "/oauth/**", "/sign-up", "/register",
                 "/registration/**", "/images/**").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
-        http.formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/hello");
+        http.formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/menu");
         http.oauth2Login().loginPage("/login").userInfoEndpoint().userService(customOAuth2UserService)
-                .and().successHandler(oAuth2LoginSuccessHandler).defaultSuccessUrl("/hello");
+                .and().successHandler(oAuth2LoginSuccessHandler).defaultSuccessUrl("/menu");
         http.logout().logoutUrl("/logout");
     }
 }
