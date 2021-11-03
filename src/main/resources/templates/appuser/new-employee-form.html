@@ -20,12 +20,12 @@
         <br>
         <h1 class = "text-center"> Create New Employee</h1>
         <div class = "card-body">
-          <form th:action = "@{/user/create-new-employee}" th:object = "${employee}" method="POST">
+          <form th:action = "@{/user/create-new-employee}" th:object = "${employee}" method="post">
 
             <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
 
             <div class = "form-group">
-              <label>Employee First Name</label>
+              <label>Employee's First Name</label>
               <input
                       type = "text"
                       name = "firstName"
@@ -36,7 +36,7 @@
             </div>
 
             <div class = "form-group">
-              <label>Employee Last Name</label>
+              <label>Employee's Last Name</label>
               <input
                       type = "text"
                       name = "lastName"
@@ -47,7 +47,7 @@
             </div>
 
             <div class = "form-group">
-              <label>Employee Username</label>
+              <label>Employee's Username</label>
               <input
                       type = "email"
                       name = "username"
@@ -58,7 +58,7 @@
             </div>
 
             <div class = "form-group">
-              <label>Employee Password</label>
+              <label>Employee's Password</label>
               <input
                       type = "password"
                       name = "password"

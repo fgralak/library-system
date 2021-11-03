@@ -48,7 +48,7 @@
                 <td th:text = "${employee.lastName}"></td>
                 <td th:text = "${employee.username}"></td>
                 <td>
-                    <a th:href = "@{/user/edit-employee-form/{id}(id=${employee.id})}"
+                    <a th:href = "@{/user/edit-user-form/{id}(id=${employee.id})}"
                        class = "btn btn-primary"> Edit </a>
                     <a th:href = "@{/user/reset-password-form/{id}(id=${employee.id})}"
                        class = "btn btn-warning"> Reset password </a>

@@ -118,7 +118,7 @@ public class AppUserService implements UserDetailsService
         return appUserRepo.findAllEmployees();
     }
 
-    public void addUserByAdmin(AppUser user)
+    public void addEmployee(AppUser user)
     {
         String username = user.getUsername();
         if(username == null || username.length() == 0 || user.getPassword() == null || user.getPassword().length() == 0)
@@ -145,7 +145,7 @@ public class AppUserService implements UserDetailsService
                 new UserNotFoundException(id));
     }
 
-    public void updateUserByAdmin(AppUser user)
+    public void updateUser(AppUser user)
     {
         String username = user.getUsername();
         if(username == null || username.length() == 0 || user.getPassword() == null || user.getPassword().length() == 0)
@@ -156,16 +156,14 @@ public class AppUserService implements UserDetailsService
         appUserRepo.save(user);
     }
 
-    public void deleteUser(Long id)
+    public AppUser deleteUser(Long id)
     {
-        if(appUserRepo.findById(id).isEmpty())
-        {
-            throw new UserNotFoundException(id);
-        }
+        AppUser appUser = getUserById(id);
         appUserRepo.deleteById(id);
+        return appUser;
     }
 
-    public void resetPassword(String password, Long id)
+    public AppUser resetPassword(String password, Long id)
     {
         if(password == null || password.length() == 0)
         {
@@ -174,5 +172,11 @@ public class AppUserService implements UserDetailsService
         AppUser appUser = getUserById(id);
         appUser.setPassword(passwordEncoder.encode(password));
         appUserRepo.save(appUser);
+        return appUser;
+    }
+
+    public AppUser getUserByUsername(String username)
+    {
+        return appUserRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
     }
 }

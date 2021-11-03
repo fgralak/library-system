@@ -47,6 +47,8 @@ public class LibrarySystemApplication {
 			bookServiceImpl.addBook(book2);
 
 			AppUser user = new AppUser();
+			user.setFirstName("User");
+			user.setLastName("User");
 			user.setUsername("user@user.com");
 			user.setPassword(passwordEncoder().encode("user"));
 			user.setRole(ROLE_USER);
@@ -63,6 +65,8 @@ public class LibrarySystemApplication {
 			employee.setEnabled(true);
 
 			AppUser admin = new AppUser();
+			admin.setFirstName("Admin");
+			admin.setLastName("Admin");
 			admin.setUsername("admin@admin.com");
 			admin.setPassword(passwordEncoder().encode("admin"));
 			admin.setRole(ROLE_ADMIN);
