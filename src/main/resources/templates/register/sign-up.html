@@ -15,7 +15,7 @@
     <img class="img-fluid" th:src="@{/images/library-icon.png}" width="150" height="150"/>
   </div>
   <br>
-  <form th:action="@{/register}" method="post" style="max-width: 400px; margin: 0 auto;">
+  <form th:action="@{/registration/register}" method="post" style="max-width: 400px; margin: 0 auto;">
 
     <div th:if="${param.error}">
       <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
@@ -23,6 +23,12 @@
 
     <div class="border border-secondary p-3 rounded">
       <p style="font-size:25px;">Create your Library Account</p>
+      <p>
+        <input type="text" name="firstName" class="form-control" placeholder="First name" required autofocus/>
+      </p>
+      <p>
+        <input type="text" name="lastName" class="form-control" placeholder="Last name" required autofocus/>
+      </p>
       <p>
         <input type="email" name="username" class="form-control" placeholder="E-mail" required autofocus/>
       </p>

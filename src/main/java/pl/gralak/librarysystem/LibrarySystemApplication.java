@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.gralak.librarysystem.appuser.AppUser;
@@ -15,6 +16,7 @@ import static pl.gralak.librarysystem.appuser.Provider.LOCAL;
 import static pl.gralak.librarysystem.appuser.Role.*;
 
 @SpringBootApplication
+@EnableAsync
 public class LibrarySystemApplication {
 
 	public static void main(String[] args) {

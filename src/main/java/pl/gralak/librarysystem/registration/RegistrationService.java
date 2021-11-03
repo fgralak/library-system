@@ -24,24 +24,19 @@ public class RegistrationService
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailBuilder emailBuilder;
 
-    public String register(RegistrationRequest request)
+    public void register(AppUser appUser)
     {
-        AppUser appUser = new AppUser();
-        appUser.setUsername(request.getUsername());
-        appUser.setPassword(request.getPassword());
         appUser.setAuthProvider(LOCAL);
         appUser.setRole(ROLE_USER);
 
         String token = appUserService.addLocalUser(appUser);
 
         String link = "http://localhost:8080/registration/confirm?token=" + token;
-        emailService.send(request.getUsername(), emailBuilder.buildEmail(request.getUsername(), link));
-
-        return token;
+        emailService.send(appUser.getUsername(), emailBuilder.buildEmail(appUser.getUsername(), link));
     }
 
     @Transactional
-    public String confirmToken(String token)
+    public void confirmToken(String token)
     {
         ConfirmationToken confirmationToken = confirmationTokenService.getConfirmationToken(token)
                 .orElseThrow(() -> new IllegalStateException("Token not found"));
@@ -60,7 +55,5 @@ public class RegistrationService
 
         confirmationTokenService.setConfirmedAt(token);
         appUserService.enableAppUser(confirmationToken.getAppUser().getUsername());
-
-        return "confirmed";
     }
 }

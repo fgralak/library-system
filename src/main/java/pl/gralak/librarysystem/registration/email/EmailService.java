@@ -32,6 +32,5 @@ public class EmailService
         {
             throw new IllegalStateException("Failed to send email");
         }
-
     }
 }
