@@ -8,10 +8,7 @@
 </head>
 <body>
     <div style="float:right; margin-right:10px; margin-top:10px;">
-        User: <span th:text="${name}"></span>
-        <br>
-        <a th:href = "@{/menu}"
-           class = "btn btn-outline-info"> Go back to menu </a>
+        <a th:href = "@{/menu}" class = "btn btn-outline-info"> Go back to menu </a>
     </div>
     <br>
     <div class = "container">
@@ -21,7 +18,7 @@
              style="max-width: 400px; margin:0 auto;"></div>
         <br>
         <div align = "center">
-            <h1> List Of Employees </h1>
+            <h1> Employee Manager </h1>
         </div>
 
         <div align = "center">
@@ -50,7 +47,7 @@
                 <td>
                     <a th:href = "@{/user/edit-user-form/{id}(id=${employee.id})}"
                        class = "btn btn-primary"> Edit </a>
-                    <a th:href = "@{/user/reset-password-form/{id}(id=${employee.id})}"
+                    <a th:href = "@{/user/reset-password-form/{id}/{role}(id=${employee.id}, role=${employee.role})}"
                        class = "btn btn-warning"> Reset password </a>
                     <a th:href = "@{/user/delete/{id}(id=${employee.id})}"
                        class = "btn btn-danger"> Delete </a>

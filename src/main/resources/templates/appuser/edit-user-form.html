@@ -7,19 +7,18 @@
           integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 </head>
 <body>
-    <div style="float:right; margin-right:10px; margin-top:10px;">
-        User: <span th:text="${name}"></span>
-        <br>
-        <a th:href = "@{/user/manage-employees}"
-           class = "btn btn-outline-info"> Go back </a>
+    <div th:switch="${user.role.name()}" style="float:right; margin-right:10px; margin-top:10px;">
+        <a th:case="ROLE_EMPLOYEE" th:href = "@{/user/manage-employees}" class = "btn btn-outline-info"> Go back to employee manager </a>
+        <a th:case="ROLE_USER" th:href = "@{/user/manage-users}" class = "btn btn-outline-info"> Go back to user manager </a>
     </div>
     <br>
 
     <div class = "container">
         <div class = "row">
-            <div class = "col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
+            <div class = "col-lg-6 col-md-6 col-sm-6 container justify-content-center card" th:switch="${user.role.name()}">
                 <br>
-                <h1 class = "text-center"> Edit Existing Employee</h1>
+                <h1 th:case="ROLE_EMPLOYEE" class = "text-center"> Edit Existing Employee</h1>
+                <h1 th:case="ROLE_USER" class = "text-center"> Edit Existing User</h1>
                 <div class = "card-body">
                     <form th:action = "@{/user/edit-user/{id}(id=${user.id})}" th:object = "${user}" method="post">
 
@@ -30,8 +29,9 @@
                         <input type="hidden" th:field="*{authProvider}" id="provider">
                         <input type="hidden" th:field="*{enabled}" id="enabled">
 
-                        <div class = "form-group">
-                            <label>Employee First Name</label>
+                        <div class = "form-group" th:switch="${user.role.name()}">
+                            <label th:case="ROLE_EMPLOYEE">Employee's First Name</label>
+                            <label th:case="ROLE_USER">User's First Name</label>
                             <input
                                     type = "text"
                                     name = "firstName"
@@ -41,8 +41,9 @@
                             />
                         </div>
 
-                        <div class = "form-group">
-                            <label>Employee Last Name</label>
+                        <div class = "form-group" th:switch="${user.role.name()}">
+                            <label th:case="ROLE_EMPLOYEE">Employee's Last Name</label>
+                            <label th:case="ROLE_USER">User's Last Name</label>
                             <input
                                     type = "text"
                                     name = "lastName"
@@ -52,8 +53,9 @@
                             />
                         </div>
 
-                        <div class = "form-group">
-                            <label>Employee Username</label>
+                        <div class = "form-group" th:switch="${user.role.name()}">
+                            <label th:case="ROLE_EMPLOYEE">Employee's Username</label>
+                            <label th:case="ROLE_USER">User's Username</label>
                             <input
                                     type = "email"
                                     name = "username"

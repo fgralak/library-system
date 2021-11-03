@@ -163,7 +163,7 @@ public class AppUserService implements UserDetailsService
         return appUser;
     }
 
-    public AppUser resetPassword(String password, Long id)
+    public void resetPassword(String password, Long id)
     {
         if(password == null || password.length() == 0)
         {
@@ -172,7 +172,6 @@ public class AppUserService implements UserDetailsService
         AppUser appUser = getUserById(id);
         appUser.setPassword(passwordEncoder.encode(password));
         appUserRepo.save(appUser);
-        return appUser;
     }
 
     public AppUser getUserByUsername(String username)

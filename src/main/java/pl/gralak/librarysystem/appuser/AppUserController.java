@@ -112,21 +112,21 @@ public class AppUserController
         }
     }
 
-    @GetMapping("/reset-password-form/{id}")
-    public String showResetPasswordForm(@PathVariable Long id, Model model)
+    @GetMapping("/reset-password-form/{id}/{role}")
+    public String showResetPasswordForm(@PathVariable Long id, @PathVariable Role role, Model model)
     {
+        model.addAttribute("role", role);
         model.addAttribute("id", id);
         model.addAttribute("password", "");
         return "appuser/reset-password-form";
     }
 
-    @PostMapping("/reset-password/{id}")
+    @PostMapping("/reset-password/{id}/{role}")
     public String resetPassword(@PathVariable Long id, @ModelAttribute("password") String password,
-                               RedirectAttributes redirectAttributes)
+                                @PathVariable Role role, RedirectAttributes redirectAttributes)
     {
-        AppUser appUser;
         try{
-            appUser = appUserService.resetPassword(password, id);
+            appUserService.resetPassword(password, id);
         } catch(MissingUsernameOrPasswordException e)
         {
             redirectAttributes.addFlashAttribute("error",
@@ -140,7 +140,7 @@ public class AppUserController
         }
         redirectAttributes.addFlashAttribute("success",
                 "Password has been reset!");
-        if(appUser.getRole() == ROLE_USER)
+        if(role == ROLE_USER)
         {
             return "redirect:/user/manage-users";
         }
