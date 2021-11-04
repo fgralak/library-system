@@ -3,6 +3,7 @@ package pl.gralak.librarysystem.appuser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.gralak.librarysystem.book.Book;
 import pl.gralak.librarysystem.exception.MissingUsernameOrPasswordException;
 import pl.gralak.librarysystem.exception.UserAlreadyExistsException;
 import pl.gralak.librarysystem.exception.UserNotFoundException;
@@ -177,5 +179,12 @@ public class AppUserService implements UserDetailsService
     public AppUser getUserByUsername(String username)
     {
         return appUserRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+    }
+
+    public List<Book> getAllRentedBooksByUser()
+    {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AppUser appUser = getUserByUsername(userDetails.getUsername());
+        return appUser.getRentedBooks();
     }
 }

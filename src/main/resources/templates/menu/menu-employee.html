@@ -14,6 +14,19 @@
             <input type="submit" value="Logout" class = "btn btn-outline-primary"/>
         </form>
     </div>
+    <div class="container text-center">
+        <br>
+        <h1 style="color:DarkMagenta; font-family:'Times', sans-serif; font-size:60px; text-align: center;">Employee's Menu</h1>
 
+        <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"
+             style="max-width:400px; margin:0 auto;"></div>
+        <div class="alert alert-success" role="alert" th:text="${success}" th:if="${success}"
+             style="max-width:400px; margin:0 auto;"></div>
+        <br>
+        <div>
+            <a th:href="@{/user/manage-users}">Manage users in the system</a>
+        </div>
+
+    </div>
 </body>
 </html>

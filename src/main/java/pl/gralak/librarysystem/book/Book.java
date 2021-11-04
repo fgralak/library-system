@@ -23,6 +23,8 @@ public class Book
     private String author;
 
     private LocalDate year;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "book_subject")
     private Classification bookSubject;
     private String location; // location in library
     private int numberOfBooks; // number of books owned by library

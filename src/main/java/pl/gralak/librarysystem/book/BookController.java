@@ -3,39 +3,43 @@ package pl.gralak.librarysystem.book;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
+@Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/book")
+@RequestMapping("/book")
 public class BookController
 {
     private final BookServiceImpl bookServiceImpl;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Book>> getAllBooks()
+    public String getAllBooks(Model model)
     {
-        return new ResponseEntity<>(bookServiceImpl.getAllBooks(), HttpStatus.OK);
+        model.addAttribute("listOfBooks", bookServiceImpl.getAllBooks());
+        return "book/book-list";
     }
 
     @GetMapping("/all-by-author")
-    public ResponseEntity<List<Book>> getAllBooksWithGivenAuthor(@RequestParam String author)
+    public String getAllBooksWithGivenAuthor(@RequestParam String author, Model model)
     {
-        return new ResponseEntity<>(bookServiceImpl.getAllBooksWithGivenAuthor(author), HttpStatus.OK);
+        model.addAttribute("listOfBooks", bookServiceImpl.getAllBooksWithGivenAuthor(author));
+        return "book/book-list";
     }
 
     @GetMapping("/all-by-title")
-    public ResponseEntity<List<Book>> getAllBooksWithGivenTitle(@RequestParam String title)
+    public String getAllBooksWithGivenTitle(@RequestParam String title, Model model)
     {
-        return new ResponseEntity<>(bookServiceImpl.getAllBooksWithGivenTitle(title), HttpStatus.OK);
+        model.addAttribute("listOfBooks", bookServiceImpl.getAllBooksWithGivenTitle(title));
+        return "book/book-list";
     }
 
     @GetMapping("/all-by-rating")
-    public ResponseEntity<List<Book>> getAllBooksWithBetterRating(@RequestParam double rating)
+    public String getAllBooksWithBetterRating(@RequestParam double rating, Model model)
     {
-        return new ResponseEntity<>(bookServiceImpl.getAllBooksWithBetterRating(rating), HttpStatus.OK);
+        model.addAttribute("listOfBooks", bookServiceImpl.getAllBooksWithBetterRating(rating));
+        return "book/book-list";
     }
 
     @GetMapping

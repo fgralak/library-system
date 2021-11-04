@@ -176,4 +176,11 @@ public class AppUserController
             return "redirect:/user/manage-employees";
         }
     }
+
+    @GetMapping("/rented-books")
+    public String getAllRentedBooksByUser(Model model)
+    {
+        model.addAttribute("listOfBooks", appUserService.getAllRentedBooksByUser());
+        return "book/book-list";
+    }
 }
