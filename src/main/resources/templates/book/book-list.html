@@ -8,7 +8,8 @@
 </head>
 <body>
 <div style="float:right; margin-right:10px; margin-top:10px;">
-    <a th:href = "@{/menu}" class = "btn btn-outline-info"> Go back to menu </a>
+    <a th:if="${role == 'ROLE_USER'}" th:href = "@{/menu}" class = "btn btn-outline-info"> Go back to menu </a>
+    <a th:if="${role == 'ROLE_EMPLOYEE'}" th:href = "@{/book/manage-books}" class = "btn btn-outline-info"> Go back to book manager </a>
 </div>
 <br>
 <div class = "container">
@@ -20,7 +21,16 @@
     <div align = "center">
         <h1> Book List </h1>
     </div>
-    <br>
+
+    <div th:if="${role == 'ROLE_EMPLOYEE'}" align = "center">
+        <div class = "col-lg-3">
+            <a th:href = "@{/book/new-book-form}" class = "btn btn-primary bnt-sm mb-3">
+                Add Book
+            </a>
+        </div>
+    </div>
+    <br th:if="${role == 'ROLE_USER'}">
+
     <table class = "table table-bordered table-striped">
         <thead class="thead-dark">
         <tr>
@@ -31,6 +41,7 @@
             <th>Available</th>
             <th>Only Inside</th>
             <th>Rating</th>
+            <th th:if="${role == 'ROLE_EMPLOYEE'}">Actions</th>
         </tr>
         </thead>
 
@@ -43,6 +54,12 @@
             <td th:text = "${book.booksAvailable}"></td>
             <td th:text = "${book.onlyInside}"></td>
             <td th:text = "${book.rating}"></td>
+            <td th:if="${role == 'ROLE_EMPLOYEE'}">
+                <a th:href = "@{/book/edit-book-form/{id}(id=${book.id})}"
+                   class = "btn btn-primary"> Edit </a>
+                <a th:href = "@{/book/delete/{id}(id=${book.id})}"
+                   class = "btn btn-danger"> Delete </a>
+            </td>
         </tr>
         </tbody>
     </table>

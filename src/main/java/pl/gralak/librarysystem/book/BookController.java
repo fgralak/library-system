@@ -3,9 +3,17 @@ package pl.gralak.librarysystem.book;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pl.gralak.librarysystem.exception.BookAlreadyExistsException;
+import pl.gralak.librarysystem.exception.BookNotFoundException;
+import pl.gralak.librarysystem.exception.MissingTitleOrAuthorException;
+import pl.gralak.librarysystem.exception.SomeBooksAreRentedException;
 
 @Controller
 @RequiredArgsConstructor
@@ -14,10 +22,17 @@ public class BookController
 {
     private final BookServiceImpl bookServiceImpl;
 
+    @GetMapping("/manage-books")
+    public String manageBooks()
+    {
+        return "book/manage-books";
+    }
+
     @GetMapping("/all")
     public String getAllBooks(Model model)
     {
         model.addAttribute("listOfBooks", bookServiceImpl.getAllBooks());
+        model.addAttribute("role", getRole());
         return "book/book-list";
     }
 
@@ -25,6 +40,7 @@ public class BookController
     public String getAllBooksWithGivenAuthor(@RequestParam String author, Model model)
     {
         model.addAttribute("listOfBooks", bookServiceImpl.getAllBooksWithGivenAuthor(author));
+        model.addAttribute("role", getRole());
         return "book/book-list";
     }
 
@@ -32,6 +48,7 @@ public class BookController
     public String getAllBooksWithGivenTitle(@RequestParam String title, Model model)
     {
         model.addAttribute("listOfBooks", bookServiceImpl.getAllBooksWithGivenTitle(title));
+        model.addAttribute("role", getRole());
         return "book/book-list";
     }
 
@@ -39,6 +56,7 @@ public class BookController
     public String getAllBooksWithBetterRating(@RequestParam double rating, Model model)
     {
         model.addAttribute("listOfBooks", bookServiceImpl.getAllBooksWithBetterRating(rating));
+        model.addAttribute("role", getRole());
         return "book/book-list";
     }
 
@@ -65,5 +83,92 @@ public class BookController
     {
         bookServiceImpl.deleteBook(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/new-book-form")
+    public String showNewBookForm(Model model)
+    {
+        Book book = new Book();
+        model.addAttribute("book", book);
+        return "book/new-book-form";
+    }
+
+    @PostMapping("/create-new-book")
+    public String createNewEmployee(@ModelAttribute("book") Book book, RedirectAttributes redirectAttributes)
+    {
+        try{
+            bookServiceImpl.addBook(book);
+        } catch(BookAlreadyExistsException e)
+        {
+            redirectAttributes.addFlashAttribute("error",
+                    "Book with title: " + book.getTitle() + " and author: " + book.getAuthor() + " already exists");
+            return "redirect:/book/new-book-form";
+        } catch(MissingTitleOrAuthorException e)
+        {
+            redirectAttributes.addFlashAttribute("error",
+                    "Value of title and/or author was null or empty");
+            return "redirect:/book/new-book-form";
+        }
+        redirectAttributes.addFlashAttribute("success",
+                "Book created!");
+        return "redirect:/book/manage-books";
+    }
+
+    @GetMapping("/edit-book-form/{id}")
+    public String showEditBookForm(@PathVariable Long id, Model model)
+    {
+        model.addAttribute("book", bookServiceImpl.getBookById(id));
+        return "book/edit-book-form";
+    }
+
+    @PostMapping("/edit-book/{id}")
+    public String editUser(@PathVariable Long id, @ModelAttribute("book") Book book,
+                           RedirectAttributes redirectAttributes)
+    {
+        try{
+            bookServiceImpl.updateBook(book);
+        } catch(MissingTitleOrAuthorException e)
+        {
+            redirectAttributes.addFlashAttribute("error",
+                    "Value of title and/or author was null or empty");
+            return "redirect:/book/edit-book-form/{id}";
+        } catch (SomeBooksAreRentedException e)
+        {
+            redirectAttributes.addFlashAttribute("error",
+                    "Cannot update book with given id because new number of book was lower than number of rented books");
+            return "redirect:/book/manage-books";
+        }
+
+        redirectAttributes.addFlashAttribute("success",
+                "Book updated!");
+        return "redirect:/book/manage-books";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes)
+    {
+        try
+        {
+            bookServiceImpl.deleteBook(id);
+        } catch (BookNotFoundException e)
+        {
+            redirectAttributes.addFlashAttribute("error",
+                    "Book with given id does not exist");
+            return "redirect:/book/manage-books";
+        } catch (SomeBooksAreRentedException e)
+        {
+            redirectAttributes.addFlashAttribute("error",
+                    "Cannot delete book with given id because one or more copies are already rented");
+            return "redirect:/book/manage-books";
+        }
+        redirectAttributes.addFlashAttribute("success",
+                "Book deleted!");
+        return "redirect:/book/manage-books";
+    }
+
+    private String getRole()
+    {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_EMPLOYEE"))) ? "ROLE_EMPLOYEE" : "ROLE_USER";
     }
 }

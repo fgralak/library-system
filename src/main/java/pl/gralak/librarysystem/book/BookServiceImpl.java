@@ -3,9 +3,7 @@ package pl.gralak.librarysystem.book;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.gralak.librarysystem.exception.BookAlreadyExistsException;
-import pl.gralak.librarysystem.exception.BookNotFoundException;
-import pl.gralak.librarysystem.exception.MissingTitleOrAuthorException;
+import pl.gralak.librarysystem.exception.*;
 import pl.gralak.librarysystem.record.Record;
 import pl.gralak.librarysystem.record.RecordRepo;
 
@@ -66,6 +64,7 @@ public class BookServiceImpl implements BookService
         recordRepo.save(new Record(ADDED, bookToAdd.getTitle(), bookToAdd.getAuthor(),
                 bookToAdd.getNumberOfBooks(), LocalDate.now()));
 
+        bookToAdd.setBooksAvailable(bookToAdd.getNumberOfBooks());
         return bookRepo.save(bookToAdd);
     }
 
@@ -92,15 +91,24 @@ public class BookServiceImpl implements BookService
         }
         bookForUpdate.setId(book.getId());
 
+        if((book.getNumberOfBooks() - book.getBooksAvailable()) > bookForUpdate.getNumberOfBooks())
+        {
+            throw new SomeBooksAreRentedException();
+        }
+
         if(book.getNumberOfBooks() > bookForUpdate.getNumberOfBooks())
         {
             recordRepo.save(new Record(DELETED, bookForUpdate.getTitle(), bookForUpdate.getAuthor(),
                     book.getNumberOfBooks() - bookForUpdate.getNumberOfBooks(), LocalDate.now()));
+            int available = book.getBooksAvailable() - (book.getNumberOfBooks() - bookForUpdate.getNumberOfBooks());
+            bookForUpdate.setBooksAvailable(available);
         }
         else if (book.getNumberOfBooks() < bookForUpdate.getNumberOfBooks())
         {
             recordRepo.save(new Record(ADDED, bookForUpdate.getTitle(), bookForUpdate.getAuthor(),
                     bookForUpdate.getNumberOfBooks() - book.getNumberOfBooks(), LocalDate.now()));
+            int available = book.getBooksAvailable() + (bookForUpdate.getNumberOfBooks() - book.getNumberOfBooks());
+            bookForUpdate.setBooksAvailable(available);
         }
         return bookRepo.save(bookForUpdate);
     }
@@ -109,6 +117,11 @@ public class BookServiceImpl implements BookService
     public void deleteBook(Long id)
     {
         Book book = bookRepo.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+
+        if(book.getBooksAvailable() < book.getNumberOfBooks())
+        {
+            throw new SomeBooksAreRentedException();
+        }
 
         recordRepo.save(new Record(DELETED, book.getTitle(), book.getAuthor(),
                 book.getNumberOfBooks(), LocalDate.now()));

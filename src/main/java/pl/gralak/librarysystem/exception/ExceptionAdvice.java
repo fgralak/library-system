@@ -65,4 +65,12 @@ public class ExceptionAdvice
         Exception exception = new Exception(e.getMessage(), httpStatus, ZonedDateTime.now());
         return new ResponseEntity<>(exception, httpStatus);
     }
+
+    @ExceptionHandler(SomeBooksAreRentedException.class)
+    public ResponseEntity<Exception> someBooksAreNotReturnedHandler(SomeBooksAreRentedException e)
+    {
+        HttpStatus httpStatus = HttpStatus.CONFLICT;
+        Exception exception = new Exception(e.getMessage(), httpStatus, ZonedDateTime.now());
+        return new ResponseEntity<>(exception, httpStatus);
+    }
 }

@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @Data
@@ -22,7 +21,7 @@ public class Book
     @Column(nullable = false)
     private String author;
 
-    private LocalDate year;
+    private int year;
     @Enumerated(EnumType.STRING)
     @Column(name = "book_subject")
     private Classification bookSubject;

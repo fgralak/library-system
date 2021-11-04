@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Library App</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+</head>
+<body>
+  <div style="float:right; margin-right:10px; margin-top:10px;">
+    <a th:href = "@{/book/manage-books}" class = "btn btn-outline-info"> Go back to book manager</a>
+  </div>
+  <br>
+  <div class = "container">
+    <div class = "row">
+      <div class = "col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
+        <br>
+        <h1 class = "text-center"> Create New Book</h1>
+        <div class = "card-body">
+          <form th:action = "@{/book/create-new-book}" th:object = "${book}" method="post">
+
+            <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+
+            <div class = "form-group">
+              <label>Book's Title</label>
+              <input
+                      type = "text"
+                      name = "title"
+                      th:field = "*{title}"
+                      class = "form-control"
+                      placeholder = "Enter title"
+              />
+            </div>
+
+            <div class = "form-group">
+              <label>Book's Author</label>
+              <input
+                      type = "text"
+                      name = "author"
+                      th:field = "*{author}"
+                      class = "form-control"
+                      placeholder = "Enter author"
+              />
+            </div>
+
+            <div class = "form-group">
+              <label>Book's Publication Year</label>
+              <input
+                      type = "number"
+                      name = "year"
+                      th:field = "*{year}"
+                      class = "form-control"
+                      placeholder = "Enter year"
+              />
+            </div>
+
+            <div class = "form-group">
+              <label>Book's Subject</label>
+              <br>
+              <select name="Subject" th:field="*{bookSubject}">
+                <option th:each="bookSubject : ${T(pl.gralak.librarysystem.book.Classification).values()}"
+                        th:value="${bookSubject}" th:text="${bookSubject}"></option>
+              </select>
+            </div>
+
+            <div class = "form-group">
+              <label>Book's Location in Library</label>
+              <input
+                      type = "text"
+                      name = "location"
+                      th:field = "*{location}"
+                      class = "form-control"
+                      placeholder = "Enter location"
+              />
+            </div>
+
+            <div class = "form-group">
+              <label>Number of Books Own by Library</label>
+              <input
+                      type = "number"
+                      name = "numberOfBooks"
+                      th:field = "*{numberOfBooks}"
+                      class = "form-control"
+                      placeholder = "Enter number of books"
+              />
+            </div>
+
+            <div class = "form-group">
+              <label>Can Only be Used in Library?</label>
+              <input
+                      type = "checkbox"
+                      name = "onlyInside"
+                      th:field = "*{onlyInside}"
+                      class = "form-control"
+              />
+            </div>
+
+            <div class = "form-group">
+              <label>Book's Rating</label>
+              <input
+                      type = "number"
+                      step = "0.1"
+                      min="0"
+                      max="10"
+                      name = "rating"
+                      th:field = "*{rating}"
+                      class = "form-control"
+                      placeholder = "Enter rating"
+              />
+            </div>
+
+            <div class = "box-footer">
+              <button type = "submit" class = "btn btn-primary">
+                Submit
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
