@@ -1,42 +1,57 @@
 package pl.gralak.librarysystem.record;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.time.LocalDate;
 
-@RestController
-@RequestMapping("/api/record")
+@Controller
+@RequestMapping("/record")
 @RequiredArgsConstructor
 public class RecordController
 {
     private final RecordServiceImpl recordServiceImpl;
 
-    @GetMapping("/all")
-    public List<Record> getAllRecords()
+    @GetMapping("/manage-records")
+    public String getRecordsManger()
     {
-        return recordServiceImpl.getAllRecords();
+        return "/record/manage-records";
+    }
+
+    @GetMapping("/all")
+    public String getAllRecords(Model model)
+    {
+        model.addAttribute("listOfRecords", recordServiceImpl.getAllRecords());
+        model.addAttribute("action", "all");
+        return "record/record-list";
     }
 
     @GetMapping("/all-added")
-    public List<Record> getAllAddedRecords()
+    public String getAllAddedRecords(Model model)
     {
-        return recordServiceImpl.getAllAddedRecords();
+        model.addAttribute("listOfRecords", recordServiceImpl.getAllAddedRecords());
+        model.addAttribute("action", "added");
+        return "record/record-list";
     }
 
     @GetMapping("/all-deleted")
-    public List<Record> getAllDeletedRecords()
+    public String getAllDeletedRecords(Model model)
     {
-        return recordServiceImpl.getAllDeletedRecords();
+        model.addAttribute("listOfRecords", recordServiceImpl.getAllDeletedRecords());
+        model.addAttribute("action", "deleted");
+        return "record/record-list";
     }
 
     @GetMapping("/range")
-    public List<Record> getRecordsFromDateRange(@RequestParam String fromDate, @RequestParam String toDate)
+    public String getRecordsFromDateRange(@RequestParam String fromDate, @RequestParam String toDate, Model model)
     {
-        return recordServiceImpl.getRecordsFromDateRange(fromDate, toDate);
+        model.addAttribute("listOfRecords", recordServiceImpl.getRecordsFromDateRange(fromDate, toDate));
+        model.addAttribute("action", "all");
+        return "record/record-list";
     }
 
 }

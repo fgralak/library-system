@@ -10,10 +10,10 @@ import java.util.List;
 @Repository
 public interface RecordRepo extends JpaRepository<Record, Long>
 {
-    @Query("SELECT r FROM Record r WHERE r.action = ADDED")
+    @Query("SELECT r FROM Record r WHERE r.action = pl.gralak.librarysystem.record.Action.ADDED")
     List<Record> findAllAddedRecords();
 
-    @Query("SELECT r FROM Record r WHERE r.action = DELETED")
+    @Query("SELECT r FROM Record r WHERE r.action = pl.gralak.librarysystem.record.Action.DELETED")
     List<Record> findAllDeletedRecords();
 
     @Query("SELECT r FROM Record r WHERE r.date > ?1 AND r.date < ?2")

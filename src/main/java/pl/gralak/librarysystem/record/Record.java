@@ -16,6 +16,7 @@ public class Record
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Action action;
     @Column(nullable = false)
@@ -24,6 +25,7 @@ public class Record
     private String author;
     @Column(nullable = false)
     private int numberOfBooks;
+    @Column(nullable = false)
     private LocalDate date;
 
     public Record(Action action, String title, String author, int numberOfBooks, LocalDate date)
