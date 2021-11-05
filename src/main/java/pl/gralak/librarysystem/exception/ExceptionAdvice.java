@@ -73,4 +73,20 @@ public class ExceptionAdvice
         Exception exception = new Exception(e.getMessage(), httpStatus, ZonedDateTime.now());
         return new ResponseEntity<>(exception, httpStatus);
     }
+
+    @ExceptionHandler(NoAvailableBookException.class)
+    public ResponseEntity<Exception> noAvailableBookHandler(NoAvailableBookException e)
+    {
+        HttpStatus httpStatus = HttpStatus.CONFLICT;
+        Exception exception = new Exception(e.getMessage(), httpStatus, ZonedDateTime.now());
+        return new ResponseEntity<>(exception, httpStatus);
+    }
+
+    @ExceptionHandler(TooManyBooksRentedException.class)
+    public ResponseEntity<Exception> tooManyBooksRentedHandler(TooManyBooksRentedException e)
+    {
+        HttpStatus httpStatus = HttpStatus.CONFLICT;
+        Exception exception = new Exception(e.getMessage(), httpStatus, ZonedDateTime.now());
+        return new ResponseEntity<>(exception, httpStatus);
+    }
 }

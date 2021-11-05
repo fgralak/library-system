@@ -10,10 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.gralak.librarysystem.exception.BookAlreadyExistsException;
-import pl.gralak.librarysystem.exception.BookNotFoundException;
-import pl.gralak.librarysystem.exception.MissingTitleOrAuthorException;
-import pl.gralak.librarysystem.exception.SomeBooksAreRentedException;
+import pl.gralak.librarysystem.appuser.AppUserService;
+import pl.gralak.librarysystem.exception.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,6 +19,7 @@ import pl.gralak.librarysystem.exception.SomeBooksAreRentedException;
 public class BookController
 {
     private final BookServiceImpl bookServiceImpl;
+    private final AppUserService appUserService;
 
     @GetMapping("/manage-books")
     public String manageBooks()
@@ -122,7 +121,7 @@ public class BookController
     }
 
     @PostMapping("/edit-book/{id}")
-    public String editUser(@PathVariable Long id, @ModelAttribute("book") Book book,
+    public String editBook(@PathVariable Long id, @ModelAttribute("book") Book book,
                            RedirectAttributes redirectAttributes)
     {
         try{
@@ -141,6 +140,45 @@ public class BookController
 
         redirectAttributes.addFlashAttribute("success",
                 "Book updated!");
+        return "redirect:/book/manage-books";
+    }
+
+    @GetMapping("/rent-book-form/{id}")
+    public String showRentBookForm(@PathVariable Long id, Model model)
+    {
+        model.addAttribute("username", "");
+        return "book/rent-book-form";
+    }
+
+    @PostMapping("/rent-book/{id}")
+    public String rentBook(@PathVariable Long id, @ModelAttribute("username") String username,
+                           RedirectAttributes redirectAttributes)
+    {
+        try{
+            appUserService.rentBook(id, username);
+        } catch(UserNotFoundException | TooManyBooksRentedException e)
+        {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/book/rent-book-form/{id}";
+        } catch(NoAvailableBookException e)
+        {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/book/manage-books";
+        }
+
+        redirectAttributes.addFlashAttribute("success",
+                "Book rented!");
+        return "redirect:/book/manage-books";
+    }
+
+    @GetMapping("/return-book/{id}")
+    public String returnBook(@PathVariable Long id, @RequestParam("username") String username,
+                           RedirectAttributes redirectAttributes)
+    {
+        appUserService.returnBook(id, username);
+
+        redirectAttributes.addFlashAttribute("success",
+                "Book returned!");
         return "redirect:/book/manage-books";
     }
 

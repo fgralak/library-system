@@ -28,6 +28,5 @@ public class Book
     private String location; // location in library
     private int numberOfBooks; // number of books owned by library
     private int booksAvailable; // number of books available in library
-    private boolean onlyInside; // if book is only available inside library
     private double rating;
 }

@@ -11,7 +11,8 @@ import pl.gralak.librarysystem.book.Book;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -43,7 +44,8 @@ public class AppUser implements UserDetails
     private boolean enabled;
 
     @ElementCollection
-    private List<Book> rentedBooks;
+    @Column(name = "rented_books")
+    private Set<Book> rentedBooks = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities()

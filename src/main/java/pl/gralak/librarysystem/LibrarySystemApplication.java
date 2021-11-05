@@ -12,8 +12,6 @@ import pl.gralak.librarysystem.appuser.AppUserRepo;
 import pl.gralak.librarysystem.book.Book;
 import pl.gralak.librarysystem.book.BookServiceImpl;
 
-import java.util.Arrays;
-
 import static pl.gralak.librarysystem.appuser.Provider.LOCAL;
 import static pl.gralak.librarysystem.appuser.Role.*;
 
@@ -56,7 +54,6 @@ public class LibrarySystemApplication {
 			user.setRole(ROLE_USER);
 			user.setAuthProvider(LOCAL);
 			user.setEnabled(true);
-			user.setRentedBooks(Arrays.asList(book1, book2));
 
 			AppUser employee = new AppUser();
 			employee.setFirstName("Kate");

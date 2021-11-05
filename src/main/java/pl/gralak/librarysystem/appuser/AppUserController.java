@@ -1,6 +1,9 @@
 package pl.gralak.librarysystem.appuser;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -181,6 +184,31 @@ public class AppUserController
     public String getAllRentedBooksByUser(Model model)
     {
         model.addAttribute("listOfBooks", appUserService.getAllRentedBooksByUser());
+        model.addAttribute("role", getRole());
         return "book/book-list";
+    }
+
+    @GetMapping("/rented-books-employee")
+    public String getAllRentedBooksByUserEmployeeView(Model model, @ModelAttribute("username") String username,
+                                                      RedirectAttributes redirectAttributes)
+    {
+        try
+        {
+            model.addAttribute("listOfBooks", appUserService.getAllRentedBooksByUsername(username));
+        } catch(UserNotFoundException e)
+        {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/book/manage-books";
+        }
+
+        model.addAttribute("view", "employee");
+        model.addAttribute("username", username);
+        return "book/book-list";
+    }
+
+    private String getRole()
+    {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_EMPLOYEE"))) ? "ROLE_EMPLOYEE" : "ROLE_USER";
     }
 }

@@ -47,6 +47,19 @@
             </p>
         </div>
     </form>
+    <br>
+    <form th:action="@{/user/rented-books-employee}" method="get" style="max-width: 400px; margin: 0 auto;">
+
+        <div>
+            <p style="font-size:20px;">Show books rented by user:</p>
+            <p>
+                <input type="text" name="username" class="form-control" placeholder="Username"/>
+            </p>
+            <p>
+                <input type="submit" value="Show" class="btn btn-primary" />
+            </p>
+        </div>
+    </form>
 </div>
 </body>
 </html>

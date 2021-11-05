@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Library App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+</head>
+<body>
+<div style="float:right; margin-right:10px; margin-top:10px;">
+    <a th:href = "@{/book/manage-books}" class = "btn btn-outline-info"> Go back to book manager </a>
+</div>
+<div class="container text-center">
+    <br>
+    <h1 style="color:brown; font-family:'Times', sans-serif; font-size:50px; text-align: center;">Rent Book</h1>
+    <div class="alert alert-danger" align = "center" role="alert" th:text="${error}" th:if="${error}"
+         style="max-width: 400px; margin:0 auto;"></div>
+    <div class="alert alert-success" align = "center" role="alert" th:text="${success}" th:if="${success}"
+         style="max-width: 400px; margin:0 auto;"></div>
+    <br>
+    <form th:action="@{/book/rent-book/{id}(id=${id})}" method="post" style="max-width: 400px; margin: 0 auto;">
+
+        <div>
+            <p style="font-size:20px;">Enter username to rent the book:</p>
+            <p>
+                <input type="text" name="username" class="form-control" placeholder="Username"/>
+            </p>
+            <p>
+                <input type="submit" value="Rent" class="btn btn-primary" />
+            </p>
+        </div>
+    </form>
+</div>
+</body>
+</html>

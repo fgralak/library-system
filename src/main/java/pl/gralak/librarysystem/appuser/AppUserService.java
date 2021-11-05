@@ -12,15 +12,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.gralak.librarysystem.book.Book;
-import pl.gralak.librarysystem.exception.MissingUsernameOrPasswordException;
-import pl.gralak.librarysystem.exception.UserAlreadyExistsException;
-import pl.gralak.librarysystem.exception.UserNotFoundException;
+import pl.gralak.librarysystem.book.BookServiceImpl;
+import pl.gralak.librarysystem.exception.*;
 import pl.gralak.librarysystem.registration.token.ConfirmationToken;
 import pl.gralak.librarysystem.registration.token.ConfirmationTokenService;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static pl.gralak.librarysystem.appuser.Provider.LOCAL;
@@ -35,6 +35,7 @@ public class AppUserService implements UserDetailsService
     private final AppUserRepo appUserRepo;
     private final PasswordEncoder passwordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
+    private final BookServiceImpl bookService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
@@ -178,13 +179,47 @@ public class AppUserService implements UserDetailsService
 
     public AppUser getUserByUsername(String username)
     {
-        return appUserRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+        return appUserRepo.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
     }
 
-    public List<Book> getAllRentedBooksByUser()
+    public Set<Book> getAllRentedBooksByUser()
     {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         AppUser appUser = getUserByUsername(userDetails.getUsername());
         return appUser.getRentedBooks();
+    }
+
+    public Set<Book> getAllRentedBooksByUsername(String username)
+    {
+        AppUser appUser = getUserByUsername(username);
+        return appUser.getRentedBooks();
+    }
+
+    public void rentBook(Long id, String username)
+    {
+        Book book = bookService.getBookById(id);
+        if(book.getBooksAvailable() == 0)
+        {
+            throw new NoAvailableBookException();
+        }
+        AppUser user = getUserByUsername(username);
+        if(user.getRentedBooks().size() == 5)
+        {
+            throw new TooManyBooksRentedException();
+        }
+        Set<Book> rentedBooks = user.getRentedBooks();
+        rentedBooks.add(book);
+        user.setRentedBooks(rentedBooks);
+        book.setBooksAvailable(book.getBooksAvailable() - 1);
+    }
+
+    public void returnBook(Long id, String username)
+    {
+        Book book = bookService.getBookById(id);
+        AppUser user = getUserByUsername(username);
+        Set<Book> rentedBooks = user.getRentedBooks();
+        rentedBooks.remove(book);
+        user.setRentedBooks(rentedBooks);
+        book.setBooksAvailable(book.getBooksAvailable() + 1);
     }
 }

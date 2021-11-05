@@ -7,62 +7,67 @@
           integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 </head>
 <body>
-<div style="float:right; margin-right:10px; margin-top:10px;">
-    <a th:if="${role == 'ROLE_USER'}" th:href = "@{/menu}" class = "btn btn-outline-info"> Go back to menu </a>
-    <a th:if="${role == 'ROLE_EMPLOYEE'}" th:href = "@{/book/manage-books}" class = "btn btn-outline-info"> Go back to book manager </a>
-</div>
-<br>
-<div class = "container">
-    <div class="alert alert-danger" align = "center" role="alert" th:text="${error}" th:if="${error}"
-         style="max-width: 400px; margin:0 auto;"></div>
-    <div class="alert alert-success" align = "center" role="alert" th:text="${success}" th:if="${success}"
-         style="max-width: 400px; margin:0 auto;"></div>
+    <div style="float:right; margin-right:10px; margin-top:10px;">
+        <a th:if="${role == 'ROLE_USER'}" th:href = "@{/menu}" class = "btn btn-outline-info"> Go back to menu </a>
+        <a th:if="${role == 'ROLE_EMPLOYEE' or view == 'employee'}" th:href = "@{/book/manage-books}"
+           class = "btn btn-outline-info"> Go back to book manager </a>
+    </div>
     <br>
-    <div align = "center">
-        <h1> Book List </h1>
-    </div>
-
-    <div th:if="${role == 'ROLE_EMPLOYEE'}" align = "center">
-        <div class = "col-lg-3">
-            <a th:href = "@{/book/new-book-form}" class = "btn btn-primary bnt-sm mb-3">
-                Add Book
-            </a>
+    <div class = "container">
+        <div class="alert alert-danger" align = "center" role="alert" th:text="${error}" th:if="${error}"
+             style="max-width: 400px; margin:0 auto;"></div>
+        <div class="alert alert-success" align = "center" role="alert" th:text="${success}" th:if="${success}"
+             style="max-width: 400px; margin:0 auto;"></div>
+        <br>
+        <div align = "center">
+            <h1> Book List </h1>
         </div>
+
+        <div th:if="${role == 'ROLE_EMPLOYEE'}" align = "center">
+            <div class = "col-lg-3">
+                <a th:href = "@{/book/new-book-form}" class = "btn btn-primary bnt-sm mb-3">
+                    Add Book
+                </a>
+            </div>
+        </div>
+        <br th:if="${role == 'ROLE_USER' or view == 'employee'}">
+
+        <table class = "table table-bordered table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Year</th>
+                <th>Subject</th>
+                <th th:if="${role == 'ROLE_EMPLOYEE'}">Available</th>
+                <th>Rating</th>
+                <th th:if="${role == 'ROLE_EMPLOYEE' or view == 'employee'}">Actions</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each = "book: ${listOfBooks}">
+                <td th:text = "${book.title}"></td>
+                <td th:text = "${book.author}"></td>
+                <td th:text = "${book.year}"></td>
+                <td th:text = "${book.bookSubject}"></td>
+                <td th:if="${role == 'ROLE_EMPLOYEE'}" th:text = "${book.booksAvailable}"></td>
+                <td th:text = "${book.rating}"></td>
+                <td th:if="${role == 'ROLE_EMPLOYEE'}">
+                    <a th:href = "@{/book/edit-book-form/{id}(id=${book.id})}"
+                       class = "btn btn-primary"> Edit </a>
+                    <a th:href = "@{/book/rent-book-form/{id}(id=${book.id})}"
+                       class = "btn btn-secondary"> Rent </a>
+                    <a th:href = "@{/book/delete/{id}(id=${book.id})}"
+                       class = "btn btn-danger"> Delete </a>
+                </td>
+                <td th:if="${view == 'employee'}">
+                    <a th:href = "@{/book/return-book/{id}(id=${book.id}, username=${username})}"
+                       class = "btn btn-secondary"> Return </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    <br th:if="${role == 'ROLE_USER'}">
-
-    <table class = "table table-bordered table-striped">
-        <thead class="thead-dark">
-        <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Year</th>
-            <th>Subject</th>
-            <th>Available</th>
-            <th>Only Inside</th>
-            <th>Rating</th>
-            <th th:if="${role == 'ROLE_EMPLOYEE'}">Actions</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        <tr th:each = "book: ${listOfBooks}">
-            <td th:text = "${book.title}"></td>
-            <td th:text = "${book.author}"></td>
-            <td th:text = "${book.year}"></td>
-            <td th:text = "${book.bookSubject}"></td>
-            <td th:text = "${book.booksAvailable}"></td>
-            <td th:text = "${book.onlyInside}"></td>
-            <td th:text = "${book.rating}"></td>
-            <td th:if="${role == 'ROLE_EMPLOYEE'}">
-                <a th:href = "@{/book/edit-book-form/{id}(id=${book.id})}"
-                   class = "btn btn-primary"> Edit </a>
-                <a th:href = "@{/book/delete/{id}(id=${book.id})}"
-                   class = "btn btn-danger"> Delete </a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
 </body>
 </html>

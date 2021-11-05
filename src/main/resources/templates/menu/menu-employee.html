@@ -16,7 +16,8 @@
     </div>
     <div class="container text-center">
         <br>
-        <h1 style="color:DarkMagenta; font-family:'Times', sans-serif; font-size:60px; text-align: center;">Employee's Menu</h1>
+        <h1 style="color:DarkMagenta; font-family:'Times', sans-serif; font-size:60px; text-align: center;
+                    max-width:500px; margin:0 auto;">Employee's Menu</h1>
 
         <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"
              style="max-width:400px; margin:0 auto;"></div>
@@ -29,6 +30,10 @@
         <br>
         <div>
             <a th:href="@{/book/manage-books}">Manage books in the system</a>
+        </div>
+        <br>
+        <div>
+            <a th:href="@{/record/manage-records}">Manage library records</a>
         </div>
 
     </div>
