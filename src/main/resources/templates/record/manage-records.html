@@ -12,28 +12,28 @@
     </div>
     <div class="container text-center">
         <br>
-        <h1 style="color:brown; font-family:'Times', sans-serif; font-size:50px; text-align: center;">Record Manager</h1>
+        <h1 style="color:brown; font-family:'Times', sans-serif; font-size:60px; text-align: center;">Record Manager</h1>
         <div class="alert alert-danger" align = "center" role="alert" th:text="${error}" th:if="${error}"
              style="max-width: 400px; margin:0 auto;"></div>
         <div class="alert alert-success" align = "center" role="alert" th:text="${success}" th:if="${success}"
              style="max-width: 400px; margin:0 auto;"></div>
         <br>
         <div>
-            <a th:href="@{/record/all}" style="font-size:20px;">List of All Records</a>
+            <a th:href="@{/record/all}" style="color:Blue; font-size:25px; text-align: center;"> List of All Records </a>
         </div>
         <br>
         <div>
-            <a th:href="@{/record/all-added}" style="font-size:20px;">List of All Records with Added Action</a>
+            <a th:href="@{/record/all-added}" style="color:Blue; font-size:25px; text-align: center;"> List of Records with Added Action </a>
         </div>
         <br>
         <div>
-            <a th:href="@{/record/all-deleted}" style="font-size:20px;">List of All Records with Deleted Action</a>
+            <a th:href="@{/record/all-deleted}" style="color:Blue; font-size:25px; text-align: center;"> List of Records with Deleted Action </a>
         </div>
         <br>
         <form th:action="@{/record/range}" method="get"  style="max-width: 400px; margin: 0 auto;">
 
-            <div class="border border-primary p-3 rounded">
-                <p style="font-size:20px;">List of all records within date range:</p>
+            <div class="border border-secondary p-5 rounded-circle">
+                <p style="font-size:20px;"> List of all records within date range: </p>
                 <p>
                     <input type="date" name="fromDate" class="form-control" placeholder="From"/>
                 </p>

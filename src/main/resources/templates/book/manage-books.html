@@ -12,54 +12,65 @@
 </div>
 <div class="container text-center">
     <br>
-    <h1 style="color:brown; font-family:'Times', sans-serif; font-size:50px; text-align: center;">Book Manager</h1>
+    <h1 style="color:Brown; font-family:'Times', sans-serif; font-size:60px; text-align: center;"> Book Manager </h1>
     <div class="alert alert-danger" align = "center" role="alert" th:text="${error}" th:if="${error}"
          style="max-width: 400px; margin:0 auto;"></div>
     <div class="alert alert-success" align = "center" role="alert" th:text="${success}" th:if="${success}"
          style="max-width: 400px; margin:0 auto;"></div>
     <br>
-    <div>
-        <a th:href="@{/book/all}" style="font-size:20px;">Get List of All Books</a>
+    <div style="color:Blue; font-size:25px; text-align: center;">
+        <a th:href="@{/book/new-book-form}"> Add New Book </a>
     </div>
     <br>
-    <form th:action="@{/book/all-by-title}" method="get" style="max-width: 400px; margin: 0 auto;">
+    <div style="color:Blue; font-size:25px; text-align: center;">
+        <a th:href="@{/book/all}"> Show List of All Books </a>
+    </div>
+    <br>
+    <form th:action="@{/book/all-by-title}" method="get" style="max-width: 400px; margin: 0 auto;"
+          class="border border-secondary p-4 rounded-circle">
 
         <div>
-            <p style="font-size:20px;">Search books by title:</p>
+            <p style="font-size:20px; max-width: 400px;">Search books by title:</p>
             <p>
-                <input type="text" name="title" class="form-control" placeholder="Title"/>
+                <input type="text" name="title" style="max-width: 300px; margin: 0 auto;" class="form-control"
+                       placeholder="Title"/>
             </p>
-            <p>
+            <p style="max-height:20px;">
                 <input type="submit" value="Search" class="btn btn-primary" />
             </p>
         </div>
     </form>
     <br>
-    <form th:action="@{/book/all-by-author}" method="get" style="max-width: 400px; margin: 0 auto;">
+    <form th:action="@{/book/all-by-author}" method="get" style="max-width: 400px; margin: 0 auto;"
+          class="border border-secondary p-4 rounded-circle">
 
         <div>
             <p style="font-size:20px;">Search books by author:</p>
             <p>
-                <input type="text" name="author" class="form-control" placeholder="Author"/>
+                <input type="text" name="author" style="max-width: 300px; margin: 0 auto;" class="form-control"
+                       placeholder="Author"/>
             </p>
-            <p>
-                <input type="submit" value="Search" class="btn btn-primary" />
+            <p style="max-height:20px;">
+                <input type="submit" value="Search" class="btn btn-primary"/>
             </p>
         </div>
     </form>
     <br>
-    <form th:action="@{/user/rented-books-employee}" method="get" style="max-width: 400px; margin: 0 auto;">
+    <form th:action="@{/user/rented-books-employee}" method="get" style="max-width: 400px; margin: 0 auto;"
+          class="border border-secondary p-4 rounded-circle">
 
         <div>
-            <p style="font-size:20px;">Show books rented by user:</p>
+            <p style="font-size:20px;"> Show books rented by user: </p>
             <p>
-                <input type="text" name="username" class="form-control" placeholder="Username"/>
+                <input type="text" name="username" style="max-width: 300px; margin: 0 auto;" class="form-control"
+                       placeholder="Username"/>
             </p>
-            <p>
+            <p style="max-height:20px;">
                 <input type="submit" value="Show" class="btn btn-primary" />
             </p>
         </div>
     </form>
+    <br>
 </div>
 </body>
 </html>

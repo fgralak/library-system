@@ -7,6 +7,7 @@
           integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 </head>
 <body>
+
     <div style="float:right; margin-right:10px; margin-top:10px;">
         <a th:if="${role == 'ROLE_USER'}" th:href = "@{/menu}" class = "btn btn-outline-info"> Go back to menu </a>
         <a th:if="${role == 'ROLE_EMPLOYEE' or view == 'employee'}" th:href = "@{/book/manage-books}"
@@ -20,17 +21,9 @@
              style="max-width: 400px; margin:0 auto;"></div>
         <br>
         <div align = "center">
-            <h1> Book List </h1>
+            <h1 style="color:SaddleBrown; font-family:'Times', sans-serif; font-size:50px; text-align: center;"> Book List </h1>
         </div>
-
-        <div th:if="${role == 'ROLE_EMPLOYEE'}" align = "center">
-            <div class = "col-lg-3">
-                <a th:href = "@{/book/new-book-form}" class = "btn btn-primary bnt-sm mb-3">
-                    Add Book
-                </a>
-            </div>
-        </div>
-        <br th:if="${role == 'ROLE_USER' or view == 'employee'}">
+        <br>
 
         <table class = "table table-bordered table-striped">
             <thead class="thead-dark">

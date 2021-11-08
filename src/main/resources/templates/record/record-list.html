@@ -17,10 +17,10 @@
   <div class="alert alert-success" align = "center" role="alert" th:text="${success}" th:if="${success}"
        style="max-width: 400px; margin:0 auto;"></div>
   <br>
-  <div align = "center">
-    <h1 th:if="${action == 'all'}"> List of records </h1>
-    <h1 th:if="${action == 'added'}"> List of records with added action </h1>
-    <h1 th:if="${action == 'deleted'}"> List of records with deleted action </h1>
+  <div align = "center" style="color:Navy; font-family:'Times', sans-serif;  text-align: center;">
+    <h1 th:if="${action == 'all'}" style=font-size:50px;"> List of Records </h1>
+    <h1 th:if="${action == 'added'}" style=font-size:50px;> List of Records with Added Action </h1>
+    <h1 th:if="${action == 'deleted'}" style=font-size:50px;> List of Records with Deleted Action </h1>
   </div>
   <br>
 

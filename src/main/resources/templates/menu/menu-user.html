@@ -17,59 +17,63 @@
     </div>
     <div class="container text-center">
         <br>
-        <h1 style="color:LimeGreen; font-family:'Times', sans-serif; font-size:60px; text-align: center;">Library Menu</h1>
+        <h1 style="color:MediumVioletRed; font-family:'Times', sans-serif; font-size:60px; text-align: center;"> User's Menu </h1>
         <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"
              style="max-width:400px; margin:0 auto;"></div>
         <div class="alert alert-success" role="alert" th:text="${success}" th:if="${success}"
              style="max-width:400px; margin:0 auto;"></div>
         <br>
         <div>
-            <a th:href="@{/user/rented-books}" style="font-size:20px;">Get List of Rented Books</a>
+            <a th:href="@{/user/rented-books}" style="color:Blue; font-size:25px; text-align: center;"> Get List of My Rented Books </a>
         </div>
         <br>
         <div>
-            <a th:href="@{/book/all}" style="font-size:20px;">Get List of All Books</a>
+            <a th:href="@{/book/all}" style="color:Blue; font-size:25px; text-align: center;"> Get List of All Books </a>
         </div>
         <br>
-        <form th:action="@{/book/all-by-title}" method="get" style="max-width: 400px; margin: 0 auto;">
+        <form th:action="@{/book/all-by-title}" method="get" style="max-width: 400px; margin: 0 auto;"
+              class="border border-secondary p-4 rounded-circle">
 
             <div>
-                <p style="font-size:20px;">Search books by title:</p>
+                <p style="font-size:20px;"> Search books by title: </p>
                 <p>
-                    <input type="text" name="title" class="form-control" placeholder="Title"/>
+                    <input type="text" name="title" style="max-width: 300px; margin: 0 auto;" class="form-control" placeholder="Title"/>
                 </p>
-                <p>
+                <p style="max-height:20px;">
                     <input type="submit" value="Search" class="btn btn-primary" />
                 </p>
             </div>
         </form>
         <br>
-        <form th:action="@{/book/all-by-author}" method="get" style="max-width: 400px; margin: 0 auto;">
+        <form th:action="@{/book/all-by-author}" method="get" style="max-width: 400px; margin: 0 auto;"
+              class="border border-secondary p-4 rounded-circle">
 
             <div>
-                <p style="font-size:20px;">Search books by author:</p>
+                <p style="font-size:20px;"> Search books by author: </p>
                 <p>
-                    <input type="text" name="author" class="form-control" placeholder="Author"/>
+                    <input type="text" name="author" style="max-width: 300px; margin: 0 auto;" class="form-control" placeholder="Author"/>
                 </p>
-                <p>
+                <p style="max-height:20px;">
                     <input type="submit" value="Search" class="btn btn-primary" />
                 </p>
             </div>
         </form>
         <br>
-        <form th:action="@{/book/all-by-rating}" method="get" style="max-width: 400px; margin: 0 auto;">
+        <form th:action="@{/book/all-by-rating}" method="get" style="max-width: 400px; margin: 0 auto;"
+              class="border border-secondary p-4 rounded-circle">
 
             <div>
-                <p style="font-size:20px;">Search books by rating:</p>
+                <p style="font-size:20px;"> Search books by rating: </p>
                 <p>
-                    <input type="number" step="0.1" min="1" max="10" name="rating" class="form-control" placeholder="Rating"/>
+                    <input type="number" step="0.1" min="1" max="10" name="rating" style="max-width: 300px; margin: 0 auto;"
+                           class="form-control" placeholder="Rating"/>
                 </p>
-                <p>
+                <p style="max-height:20px;">
                     <input type="submit" value="Search" class="btn btn-primary" />
                 </p>
             </div>
         </form>
-
+        <br>
     </div>
 </body>
 </html>
