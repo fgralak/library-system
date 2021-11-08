@@ -89,4 +89,12 @@ public class ExceptionAdvice
         Exception exception = new Exception(e.getMessage(), httpStatus, ZonedDateTime.now());
         return new ResponseEntity<>(exception, httpStatus);
     }
+
+    @ExceptionHandler(UserAccountNotEnabledException.class)
+    public ResponseEntity<Exception> tooManyBooksRentedHandler(UserAccountNotEnabledException e)
+    {
+        HttpStatus httpStatus = HttpStatus.CONFLICT;
+        Exception exception = new Exception(e.getMessage(), httpStatus, ZonedDateTime.now());
+        return new ResponseEntity<>(exception, httpStatus);
+    }
 }

@@ -25,6 +25,7 @@ import java.util.UUID;
 
 import static pl.gralak.librarysystem.appuser.Provider.LOCAL;
 import static pl.gralak.librarysystem.appuser.Role.ROLE_EMPLOYEE;
+import static pl.gralak.librarysystem.appuser.Role.ROLE_USER;
 
 @Service
 @RequiredArgsConstructor
@@ -121,7 +122,7 @@ public class AppUserService implements UserDetailsService
         return appUserRepo.findAllEmployees();
     }
 
-    public void addEmployee(AppUser user)
+    public void addUserByAdmin(AppUser user, String type)
     {
         String username = user.getUsername();
         if(username == null || username.length() == 0 || user.getPassword() == null || user.getPassword().length() == 0)
@@ -137,7 +138,14 @@ public class AppUserService implements UserDetailsService
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setAuthProvider(LOCAL);
-        user.setRole(ROLE_EMPLOYEE);
+        if(type.equals("user"))
+        {
+            user.setRole(ROLE_USER);
+        }
+        else
+        {
+            user.setRole(ROLE_EMPLOYEE);
+        }
         user.setEnabled(true);
         appUserRepo.save(user);
     }
@@ -202,7 +210,12 @@ public class AppUserService implements UserDetailsService
         {
             throw new NoAvailableBookException();
         }
+
         AppUser user = getUserByUsername(username);
+        if(!user.isEnabled())
+        {
+            throw new UserAccountNotEnabledException(username);
+        }
         if(user.getRentedBooks().size() == 5)
         {
             throw new TooManyBooksRentedException();

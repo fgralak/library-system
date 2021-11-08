@@ -156,7 +156,7 @@ public class BookController
     {
         try{
             appUserService.rentBook(id, username);
-        } catch(UserNotFoundException | TooManyBooksRentedException e)
+        } catch(UserNotFoundException | TooManyBooksRentedException | UserAccountNotEnabledException e)
         {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/book/rent-book-form/{id}";

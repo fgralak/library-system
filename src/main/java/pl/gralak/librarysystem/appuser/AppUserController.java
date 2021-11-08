@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -42,43 +41,57 @@ public class AppUserController
         try
         {
             model.addAttribute("user", appUserService.getUserByUsername(username));
-        } catch (UsernameNotFoundException e)
+        } catch (UserNotFoundException e)
         {
             redirectAttributes.addFlashAttribute("error",
-                    "User with username: " + username + " does not exist");
+                    "User with username: " + username + ", does not exist");
             return "redirect:/user/manage-users";
         }
 
         return "appuser/user-profile";
     }
 
-    @GetMapping("/new-employee-form")
-    public String showNewEmployeeForm(Model model)
+    @GetMapping("/new-appuser-form")
+    public String showNewEmployeeForm(Model model, @RequestParam("type") String type)
     {
-        AppUser employee = new AppUser();
-        model.addAttribute("employee", employee);
-        return "appuser/new-employee-form";
+        AppUser appUser = new AppUser();
+        model.addAttribute("appuser", appUser);
+        model.addAttribute("type", type);
+        return "appuser/new-appuser-form";
     }
 
-    @PostMapping("/create-new-employee")
-    public String createNewEmployee(@ModelAttribute("employee") AppUser appUser, RedirectAttributes redirectAttributes)
+    @PostMapping("/create-new-appuser")
+    public String createNewEmployee(@ModelAttribute("appuser") AppUser appUser, @RequestParam("type") String type,
+                                    RedirectAttributes redirectAttributes)
     {
         try{
-            appUserService.addEmployee(appUser);
+            appUserService.addUserByAdmin(appUser, type);
         } catch(UserAlreadyExistsException e)
         {
             redirectAttributes.addFlashAttribute("error",
-                    "Employee with username: " + appUser.getUsername() + " already exists");
-            return "redirect:/user/new-employee-form";
+                    type.substring(0, 1).toUpperCase() + type.substring(1) + " with username: "
+                            + appUser.getUsername() + ", already exists");
+
+            return "redirect:/user/new-appuser-form?type=" + type;
         } catch(MissingUsernameOrPasswordException e)
         {
             redirectAttributes.addFlashAttribute("error",
                     "Value of username and/or password was null or empty");
-            return "redirect:/user/new-employee-form";
+            return "redirect:/user/new-appuser-form?type=" + type;
         }
-        redirectAttributes.addFlashAttribute("success",
-                "Employee created!");
-        return "redirect:/user/manage-employees";
+
+        if(type.equals("user"))
+        {
+            redirectAttributes.addFlashAttribute("success",
+                    "User created!");
+            return "redirect:/user/manage-users";
+        }
+        else
+        {
+            redirectAttributes.addFlashAttribute("success",
+                    "Employee created!");
+            return "redirect:/user/manage-employees";
+        }
     }
 
     @GetMapping("/edit-user-form/{id}")

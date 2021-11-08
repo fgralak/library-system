@@ -8,21 +8,24 @@
 </head>
 <body>
   <div style="float:right; margin-right:10px; margin-top:10px;">
-    <a th:href = "@{/user/manage-employees}" class = "btn btn-outline-info"> Go back to employee manager</a>
+    <a th:if="${type == 'employee'}" th:href = "@{/user/manage-employees}" class = "btn btn-outline-info"> Go back to employee manager </a>
+    <a th:if="${type == 'user'}" th:href = "@{/user/manage-users}" class = "btn btn-outline-info"> Go back to user manager </a>
   </div>
   <br>
   <div class = "container">
     <div class = "row">
       <div class = "col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
         <br>
-        <h1 class = "text-center"> Create New Employee</h1>
+        <h1 th:if="${type == 'employee'}" class = "text-center"> Create New Employee </h1>
+        <h1 th:if="${type == 'user'}" class = "text-center"> Create New User </h1>
         <div class = "card-body">
-          <form th:action = "@{/user/create-new-employee}" th:object = "${employee}" method="post">
+          <form th:action = "@{/user/create-new-appuser(type=${type})}" th:object = "${appuser}" method="post">
 
             <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
 
             <div class = "form-group">
-              <label>Employee's First Name</label>
+              <label th:if="${type == 'employee'}"> Employee's First Name </label>
+              <label th:if="${type == 'user'}"> User's First Name </label>
               <input
                       type = "text"
                       name = "firstName"
@@ -33,7 +36,8 @@
             </div>
 
             <div class = "form-group">
-              <label>Employee's Last Name</label>
+              <label th:if="${type == 'employee'}"> Employee's Last Name </label>
+              <label th:if="${type == 'user'}"> User's Last Name </label>
               <input
                       type = "text"
                       name = "lastName"
@@ -44,7 +48,8 @@
             </div>
 
             <div class = "form-group">
-              <label>Employee's Username</label>
+              <label th:if="${type == 'employee'}"> Employee's Username </label>
+              <label th:if="${type == 'user'}"> User's Username </label>
               <input
                       type = "email"
                       name = "username"
@@ -55,7 +60,8 @@
             </div>
 
             <div class = "form-group">
-              <label>Employee's Password</label>
+              <label th:if="${type == 'employee'}"> Employee's Password </label>
+              <label th:if="${type == 'user'}"> User's Password </label>
               <input
                       type = "password"
                       name = "password"
