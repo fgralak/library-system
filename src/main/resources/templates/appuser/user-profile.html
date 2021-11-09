@@ -18,7 +18,7 @@
              style="max-width: 400px; margin:0 auto;"></div>
         <br>
         <div align = "center">
-            <h1> User's Profile </h1>
+            <h1 style="color:Teal; font-family:'Times', sans-serif; font-size:50 text-align: center;"> User's Profile </h1>
         </div>
         <br>
         <table class = "table table-bordered table-striped">
@@ -40,9 +40,9 @@
                 <td th:text = "${user.authProvider}"></td>
                 <td th:text = "${user.enabled}"></td>
                 <td>
-                    <a th:href = "@{/user/edit-user-form/{id}(id=${user.id})}"
+                    <a th:href = "@{/user/edit-form/{id}(id=${user.id})}"
                        class = "btn btn-primary"> Edit </a>
-                    <a th:href = "@{/user/reset-password-form/{id}/{role}(id=${user.id}, role=${user.role})}"
+                    <a th:href = "@{/user/reset-password-form/{role}/{id}(role=${user.role}, id=${user.id})}"
                        class = "btn btn-warning"> Reset password </a>
                     <a th:href = "@{/user/delete/{id}(id=${user.id})}"
                        class = "btn btn-danger"> Delete </a>

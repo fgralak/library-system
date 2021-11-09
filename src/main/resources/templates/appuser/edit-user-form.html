@@ -20,7 +20,7 @@
                 <h1 th:case="ROLE_EMPLOYEE" class = "text-center"> Edit Existing Employee</h1>
                 <h1 th:case="ROLE_USER" class = "text-center"> Edit Existing User</h1>
                 <div class = "card-body">
-                    <form th:action = "@{/user/edit-user/{id}(id=${user.id})}" th:object = "${user}" method="post">
+                    <form th:action = "@{/user/edit/{id}(id=${user.id})}" th:object = "${user}" method="post">
 
                         <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
 

@@ -19,7 +19,7 @@
         <h1 th:if="${type == 'employee'}" class = "text-center"> Create New Employee </h1>
         <h1 th:if="${type == 'user'}" class = "text-center"> Create New User </h1>
         <div class = "card-body">
-          <form th:action = "@{/user/create-new-appuser(type=${type})}" th:object = "${appuser}" method="post">
+          <form th:action = "@{/user/create/{type}(type=${type})}" th:object = "${appuser}" method="post">
 
             <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
 
@@ -65,13 +65,13 @@
               <input
                       type = "password"
                       name = "password"
-                      th:field = "*{password}"
-                      class = "form-control"
+                            th:field = "*{password}"
+                            class = "form-control"
                       placeholder = "Enter password"
               />
             </div>
 
-            <div class = "box-footer">
+            <div class = "text-center">
               <button type = "submit" class = "btn btn-primary">
                 Submit
               </button>

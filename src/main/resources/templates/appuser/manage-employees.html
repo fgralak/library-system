@@ -20,10 +20,9 @@
         <div align = "center">
             <h1 style="color:Brown; font-family:'Times', sans-serif; font-size:50px; text-align: center;"> Employee Manager </h1>
         </div>
-
         <div align = "center">
             <div class = "col-lg-3">
-                <a th:href = "@{/user/new-appuser-form(type='employee')}" class = "btn btn-primary bnt-sm mb-3">
+                <a th:href = "@{/user/create-form/{type}(type='employee')}" class = "btn btn-primary mt-3 mb-4">
                     Add Employee
                 </a>
             </div>
@@ -45,9 +44,9 @@
                 <td th:text = "${employee.lastName}"></td>
                 <td th:text = "${employee.username}"></td>
                 <td>
-                    <a th:href = "@{/user/edit-user-form/{id}(id=${employee.id})}"
-                       class = "btn btn-primary"> Edit </a>
-                    <a th:href = "@{/user/reset-password-form/{id}/{role}(id=${employee.id}, role=${employee.role})}"
+                    <a th:href = "@{/user/edit-form/{id}(id=${employee.id})}"
+                       class = "btn btn-secondary"> Edit </a>
+                    <a th:href = "@{/user/reset-password-form/{role}/{id}(role=${employee.role}, id=${employee.id})}"
                        class = "btn btn-warning"> Reset password </a>
                     <a th:href = "@{/user/delete/{id}(id=${employee.id})}"
                        class = "btn btn-danger"> Delete </a>

@@ -30,12 +30,20 @@ public class BookServiceImpl implements BookService
     @Override
     public List<Book> getAllBooksWithGivenAuthor(String author)
     {
+        if(author == null || author.length() == 0)
+        {
+            throw new MissingTitleOrAuthorException();
+        }
         return bookRepo.findAllWithGivenAuthor(author);
     }
 
     @Override
     public List<Book> getAllBooksWithGivenTitle(String title)
     {
+        if(title == null || title.length() == 0)
+        {
+            throw new MissingTitleOrAuthorException();
+        }
         return bookRepo.findAllWithGivenTitle(title);
     }
 

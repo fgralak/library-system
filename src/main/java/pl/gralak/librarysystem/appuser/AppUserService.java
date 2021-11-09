@@ -122,7 +122,7 @@ public class AppUserService implements UserDetailsService
         return appUserRepo.findAllEmployees();
     }
 
-    public void addUserByAdmin(AppUser user, String type)
+    public void addUserByAdminOrEmployee(AppUser user, String type)
     {
         String username = user.getUsername();
         if(username == null || username.length() == 0 || user.getPassword() == null || user.getPassword().length() == 0)

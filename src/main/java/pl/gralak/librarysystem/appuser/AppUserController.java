@@ -51,8 +51,8 @@ public class AppUserController
         return "appuser/user-profile";
     }
 
-    @GetMapping("/new-appuser-form")
-    public String showNewEmployeeForm(Model model, @RequestParam("type") String type)
+    @GetMapping("/create-form/{type}")
+    public String showNewUserForm(Model model, @PathVariable("type") String type)
     {
         AppUser appUser = new AppUser();
         model.addAttribute("appuser", appUser);
@@ -60,24 +60,24 @@ public class AppUserController
         return "appuser/new-appuser-form";
     }
 
-    @PostMapping("/create-new-appuser")
-    public String createNewEmployee(@ModelAttribute("appuser") AppUser appUser, @RequestParam("type") String type,
+    @PostMapping("/create/{type}")
+    public String createNewAppUser(@ModelAttribute("appuser") AppUser appUser, @PathVariable("type") String type,
                                     RedirectAttributes redirectAttributes)
     {
-        try{
-            appUserService.addUserByAdmin(appUser, type);
+        try
+        {
+            appUserService.addUserByAdminOrEmployee(appUser, type);
         } catch(UserAlreadyExistsException e)
         {
             redirectAttributes.addFlashAttribute("error",
                     type.substring(0, 1).toUpperCase() + type.substring(1) + " with username: "
                             + appUser.getUsername() + ", already exists");
-
-            return "redirect:/user/new-appuser-form?type=" + type;
+            return "redirect:/user/create-form/{type}";
         } catch(MissingUsernameOrPasswordException e)
         {
             redirectAttributes.addFlashAttribute("error",
                     "Value of username and/or password was null or empty");
-            return "redirect:/user/new-appuser-form?type=" + type;
+            return "redirect:/user/create-form/{type}";
         }
 
         if(type.equals("user"))
@@ -94,14 +94,14 @@ public class AppUserController
         }
     }
 
-    @GetMapping("/edit-user-form/{id}")
+    @GetMapping("/edit-form/{id}")
     public String showEditUserForm(@PathVariable Long id, Model model)
     {
         model.addAttribute("user", appUserService.getUserById(id));
         return "appuser/edit-user-form";
     }
 
-    @PostMapping("/edit-user/{id}")
+    @PostMapping("/edit/{id}")
     public String editUser(@PathVariable Long id, @ModelAttribute("user") AppUser appUser,
                                RedirectAttributes redirectAttributes)
     {
@@ -111,7 +111,7 @@ public class AppUserController
         {
             redirectAttributes.addFlashAttribute("error",
                     "Value of username and/or password was null or empty");
-            return "redirect:/user/edit-employee-form/{id}";
+            return "redirect:/user/edit-form/{id}";
         }
 
         if(appUser.getRole() == ROLE_USER)
@@ -128,7 +128,7 @@ public class AppUserController
         }
     }
 
-    @GetMapping("/reset-password-form/{id}/{role}")
+    @GetMapping("/reset-password-form/{role}/{id}")
     public String showResetPasswordForm(@PathVariable Long id, @PathVariable Role role, Model model)
     {
         model.addAttribute("role", role);
@@ -137,9 +137,9 @@ public class AppUserController
         return "appuser/reset-password-form";
     }
 
-    @PostMapping("/reset-password/{id}/{role}")
-    public String resetPassword(@PathVariable Long id, @ModelAttribute("password") String password,
-                                @PathVariable Role role, RedirectAttributes redirectAttributes)
+    @PostMapping("/reset-password/{role}/{id}")
+    public String resetPassword(@PathVariable Long id, @PathVariable Role role,
+                                @ModelAttribute("password") String password, RedirectAttributes redirectAttributes)
     {
         try{
             appUserService.resetPassword(password, id);
@@ -156,7 +156,7 @@ public class AppUserController
         }
         redirectAttributes.addFlashAttribute("success",
                 "Password has been reset!");
-        if(role == ROLE_USER)
+        if(role.equals(ROLE_USER))
         {
             return "redirect:/user/manage-users";
         }
