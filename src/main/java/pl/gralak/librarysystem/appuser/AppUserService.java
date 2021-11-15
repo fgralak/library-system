@@ -2,9 +2,7 @@ package pl.gralak.librarysystem.appuser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,7 +16,6 @@ import pl.gralak.librarysystem.registration.token.ConfirmationToken;
 import pl.gralak.librarysystem.registration.token.ConfirmationTokenService;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -50,10 +47,7 @@ public class AppUserService implements UserDetailsService
         {
             log.info("User found in the database: {}", username);
         }
-
-        return new User(appUser.getUsername(), appUser.getPassword() ,appUser.isEnabled(),
-                appUser.isAccountNonExpired(), appUser.isCredentialsNonExpired(), appUser.isAccountNonLocked(),
-                Collections.singleton(new SimpleGrantedAuthority(appUser.getRole().name())) );
+        return appUser;
     }
 
     public void addOAuth2User(AppUser user)

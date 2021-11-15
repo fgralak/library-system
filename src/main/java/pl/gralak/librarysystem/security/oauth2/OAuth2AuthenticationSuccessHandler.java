@@ -20,7 +20,7 @@ import static pl.gralak.librarysystem.appuser.Role.ROLE_USER;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler
+public class OAuth2AuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler
 {
     public final AppUserService appUserService;
 
@@ -44,7 +44,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         {
             log.info("User already exist in database");
         }
-
+        response.sendRedirect("/menu");
         super.onAuthenticationSuccess(request, response, authentication);
     }
 }

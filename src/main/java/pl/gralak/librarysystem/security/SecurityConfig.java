@@ -2,17 +2,28 @@ package pl.gralak.librarysystem.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.gralak.librarysystem.appuser.AppUserService;
 import pl.gralak.librarysystem.security.oauth2.CustomOAuth2UserService;
-import pl.gralak.librarysystem.security.oauth2.OAuth2LoginSuccessHandler;
+import pl.gralak.librarysystem.security.oauth2.OAuth2AuthenticationSuccessHandler;
 
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
+    private final AppUserService appUserService;
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2AuthenticationSuccessHandler authenticationSuccessHandler;
+    private final PasswordEncoder passwordEncoder;
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception
+    {
+        auth.userDetailsService(appUserService).passwordEncoder(passwordEncoder);
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception
@@ -32,8 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         http.authorizeRequests().antMatchers("/user/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_EMPLOYEE");
         http.authorizeRequests().anyRequest().authenticated();
         http.formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/menu");
+        http.rememberMe().key("jAAAjyXe0nRSeoMOOXlL0snIWBLfYc7a").tokenValiditySeconds(14 * 24 * 60 * 60);
         http.oauth2Login().loginPage("/login").userInfoEndpoint().userService(customOAuth2UserService)
-                .and().successHandler(oAuth2LoginSuccessHandler).defaultSuccessUrl("/menu");
+                .and().successHandler(authenticationSuccessHandler);
         http.logout().logoutUrl("/logout");
     }
 }
