@@ -18,7 +18,7 @@
                 <br>
                 <h1 class = "text-center"> Edit Existing Book</h1>
                 <div class = "card-body">
-                    <form th:action = "@{/book/edit-book/{id}(id=${book.id})}" th:object = "${book}" method="post">
+                    <form th:action = "@{/book/edit/{id}(id=${book.id})}" th:object = "${book}" method="post">
 
                         <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
 

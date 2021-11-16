@@ -2,6 +2,8 @@ package pl.gralak.librarysystem.appuser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,12 +19,12 @@ import pl.gralak.librarysystem.registration.token.ConfirmationTokenService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 import static pl.gralak.librarysystem.appuser.Provider.LOCAL;
-import static pl.gralak.librarysystem.appuser.Role.ROLE_EMPLOYEE;
-import static pl.gralak.librarysystem.appuser.Role.ROLE_USER;
+import static pl.gralak.librarysystem.appuser.Role.*;
 
 @Service
 @RequiredArgsConstructor
@@ -181,7 +183,7 @@ public class AppUserService implements UserDetailsService
 
     public AppUser getUserByUsername(String username)
     {
-        return appUserRepo.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+        return appUserRepo.findUserByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
     }
 
     public Set<Book> getAllRentedBooksByUser()
@@ -228,5 +230,51 @@ public class AppUserService implements UserDetailsService
         rentedBooks.remove(book);
         user.setRentedBooks(rentedBooks);
         book.setBooksAvailable(book.getBooksAvailable() + 1);
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void init()
+    {
+        Optional<AppUser> appUser = appUserRepo.findByUsername("user@user.com");
+        if (!appUser.isPresent())
+        {
+            AppUser user = new AppUser();
+            user.setFirstName("User");
+            user.setLastName("User");
+            user.setUsername("user@user.com");
+            user.setPassword(passwordEncoder.encode("user"));
+            user.setRole(ROLE_USER);
+            user.setAuthProvider(LOCAL);
+            user.setEnabled(true);
+            appUserRepo.save(user);
+        }
+
+        appUser = appUserRepo.findByUsername("employee@employee.com");
+        if (!appUser.isPresent())
+        {
+            AppUser user = new AppUser();
+            user.setFirstName("Employee");
+            user.setLastName("Employee");
+            user.setUsername("employee@employee.com");
+            user.setPassword(passwordEncoder.encode("employee"));
+            user.setRole(ROLE_EMPLOYEE);
+            user.setAuthProvider(LOCAL);
+            user.setEnabled(true);
+            appUserRepo.save(user);
+        }
+
+        appUser = appUserRepo.findByUsername("admin@admin.com");
+        if (!appUser.isPresent())
+        {
+            AppUser user = new AppUser();
+            user.setFirstName("Admin");
+            user.setLastName("Admin");
+            user.setUsername("admin@admin.com");
+            user.setPassword(passwordEncoder.encode("admin"));
+            user.setRole(ROLE_ADMIN);
+            user.setAuthProvider(LOCAL);
+            user.setEnabled(true);
+            appUserRepo.save(user);
+        }
     }
 }

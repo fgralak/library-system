@@ -179,7 +179,7 @@ public class BookController
         return "redirect:/book/manage-books";
     }
 
-    @GetMapping("/return-book/{id}")
+    @GetMapping("/return/{id}")
     public String returnBook(@PathVariable Long id, @RequestParam("username") String username,
                            RedirectAttributes redirectAttributes)
     {

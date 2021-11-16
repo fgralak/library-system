@@ -33,6 +33,7 @@
                 <th>Year</th>
                 <th>Subject</th>
                 <th th:if="${role == 'ROLE_EMPLOYEE'}">Available</th>
+                <th th:if="${role == 'ROLE_EMPLOYEE'}">Location</th>
                 <th>Rating</th>
                 <th th:if="${role == 'ROLE_EMPLOYEE' or view == 'employee'}">Actions</th>
             </tr>
@@ -45,17 +46,18 @@
                 <td th:text = "${book.year}"></td>
                 <td th:text = "${book.bookSubject}"></td>
                 <td th:if="${role == 'ROLE_EMPLOYEE'}" th:text = "${book.booksAvailable}"></td>
+                <td th:if="${role == 'ROLE_EMPLOYEE'}" th:text = "${book.location}"></td>
                 <td th:text = "${book.rating}"></td>
                 <td th:if="${role == 'ROLE_EMPLOYEE'}">
-                    <a th:href = "@{/book/edit-book-form/{id}(id=${book.id})}"
+                    <a th:href = "@{/book/edit-form/{id}(id=${book.id})}"
                        class = "btn btn-primary"> Edit </a>
-                    <a th:href = "@{/book/rent-book-form/{id}(id=${book.id})}"
+                    <a th:href = "@{/book/rent-form/{id}(id=${book.id})}"
                        class = "btn btn-secondary"> Rent </a>
                     <a th:href = "@{/book/delete/{id}(id=${book.id})}"
                        class = "btn btn-danger"> Delete </a>
                 </td>
                 <td th:if="${view == 'employee'}">
-                    <a th:href = "@{/book/return-book/{id}(id=${book.id}, username=${username})}"
+                    <a th:href = "@{/book/return/{id}(id=${book.id}, username=${username})}"
                        class = "btn btn-secondary"> Return </a>
                 </td>
             </tr>

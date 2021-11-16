@@ -18,7 +18,7 @@
     <div class="alert alert-success" align = "center" role="alert" th:text="${success}" th:if="${success}"
          style="max-width: 400px; margin:0 auto;"></div>
     <br>
-    <form th:action="@{/book/rent-book/{id}(id=${id})}" method="post" style="max-width: 400px; margin: 0 auto;">
+    <form th:action="@{/book/rent/{id}(id=${id})}" method="post" style="max-width: 400px; margin: 0 auto;">
 
         <div>
             <p style="font-size:20px;">Enter username to rent the book:</p>

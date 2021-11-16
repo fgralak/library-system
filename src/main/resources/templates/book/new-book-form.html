@@ -17,7 +17,7 @@
         <br>
         <h1 class = "text-center"> Create New Book</h1>
         <div class = "card-body">
-          <form th:action = "@{/book/create-new-book}" th:object = "${book}" method="post">
+          <form th:action = "@{/book/create}" th:object = "${book}" method="post">
 
             <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
 

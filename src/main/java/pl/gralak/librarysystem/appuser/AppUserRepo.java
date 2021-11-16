@@ -24,5 +24,7 @@ public interface AppUserRepo extends JpaRepository<AppUser, Long>
     List<AppUser> findAllEmployees();
 
     @Query("SELECT a FROM AppUser a WHERE a.username = ?1 and a.role = pl.gralak.librarysystem.appuser.Role.ROLE_USER")
+    Optional<AppUser> findUserByUsername(String username);
+
     Optional<AppUser> findByUsername(String username);
 }

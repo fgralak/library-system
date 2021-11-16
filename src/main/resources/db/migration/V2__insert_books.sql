@@ -1,0 +1,11 @@
+INSERT INTO Book(title, author, year, book_subject, location, number_of_books, books_available, rating) VALUES ('The Lord of the Rings 1: The Fellowship of the Ring', 'J.R.R. Tolkien', 1961, 'FANTASY', 'F24', 5, 5, 9.8);
+INSERT INTO Book(title, author, year, book_subject, location, number_of_books, books_available, rating) VALUES ('The Lord of the Rings 2: The Two Towers', 'J.R.R. Tolkien', 1962, 'FANTASY', 'F24', 5, 5, 9.9);
+INSERT INTO Book(title, author, year, book_subject, location, number_of_books, books_available, rating) VALUES ('The Lord of the Rings 3: The Return of the King', 'J.R.R. Tolkien', 1963, 'FANTASY', 'F24', 5, 5, 10);
+
+INSERT INTO Book(title, author, year, book_subject, location, number_of_books, books_available, rating) VALUES ('Harry Potter and the Philosophers Stone', 'J.K. Rowling', 2000, 'FANTASY', 'F25', 6, 6, 8.9);
+INSERT INTO Book(title, author, year, book_subject, location, number_of_books, books_available, rating) VALUES ('Harry Potter and the Chamber of Secrets', 'J.K. Rowling', 2000, 'FANTASY', 'F25', 6, 6, 9.1);
+INSERT INTO Book(title, author, year, book_subject, location, number_of_books, books_available, rating) VALUES ('Harry Potter and the Prisoner of Azkaban', 'J.K. Rowling', 2001, 'FANTASY', 'F25', 6, 6, 9.3);
+INSERT INTO Book(title, author, year, book_subject, location, number_of_books, books_available, rating) VALUES ('Harry Potter and the Goblet of Fire', 'J.K. Rowling', 2001, 'FANTASY', 'F25', 8, 8, 9.4);
+INSERT INTO Book(title, author, year, book_subject, location, number_of_books, books_available, rating) VALUES ('Harry Potter and the Order of the Phoenix', 'J.K. Rowling', 2004, 'FANTASY', 'F25', 8, 8, 9.5);
+INSERT INTO Book(title, author, year, book_subject, location, number_of_books, books_available, rating) VALUES ('Harry Potter and the Half-Blood Prince', 'J.K. Rowling', 2006, 'FANTASY', 'F25', 10, 10, 9.6);
+INSERT INTO Book(title, author, year, book_subject, location, number_of_books, books_available, rating) VALUES ('Harry Potter and the Deathly Hallows', 'J.K. Rowling', 2008, 'FANTASY', 'F25', 10, 10, 9.7);
