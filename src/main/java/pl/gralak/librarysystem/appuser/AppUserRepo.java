@@ -13,9 +13,6 @@ import java.util.Optional;
 @Transactional
 public interface AppUserRepo extends JpaRepository<AppUser, Long>
 {
-    @Query("SELECT a FROM AppUser a WHERE a.username = ?1 AND a.authProvider = ?2")
-    AppUser findByUsernameAndProvider(String username, Provider provider);
-
     @Modifying
     @Query("UPDATE AppUser a SET a.enabled = true WHERE a.username = ?1")
     void enableAppUser(String username);
@@ -26,5 +23,10 @@ public interface AppUserRepo extends JpaRepository<AppUser, Long>
     @Query("SELECT a FROM AppUser a WHERE a.username = ?1 and a.role = pl.gralak.librarysystem.appuser.Role.ROLE_USER")
     Optional<AppUser> findUserByUsername(String username);
 
+    @Query("SELECT a FROM AppUser a WHERE a.username = ?1")
     Optional<AppUser> findByUsername(String username);
+
+    @Modifying
+    @Query("UPDATE AppUser a SET a.authProvider = ?2 WHERE a.username = ?1")
+    void updateAuthProvider(String username, Provider provider);
 }

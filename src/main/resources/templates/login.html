@@ -20,7 +20,6 @@
             <div th:if="${param.error}">
                 <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
             </div>
-
             <div th:if="${param.logout}">
                 <p class="text-success" style="font-size:20px;">You have been logged out.</p>
             </div>

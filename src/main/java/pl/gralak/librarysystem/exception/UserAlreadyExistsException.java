@@ -1,11 +1,9 @@
 package pl.gralak.librarysystem.exception;
 
-import pl.gralak.librarysystem.appuser.Provider;
-
 public class UserAlreadyExistsException extends RuntimeException
 {
-    public UserAlreadyExistsException(String username, Provider provider)
+    public UserAlreadyExistsException(String username)
     {
-        super("App User with username: " + username + ", provided by: " + provider.name() + ", already exists");
+        super("App User with username: " + username + ", already exists");
     }
 }

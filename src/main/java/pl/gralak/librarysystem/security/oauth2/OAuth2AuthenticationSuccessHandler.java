@@ -40,8 +40,10 @@ public class OAuth2AuthenticationSuccessHandler extends SavedRequestAwareAuthent
         try
         {
             appUserService.addOAuth2User(user);
+            log.info("New user created");
         } catch(UserAlreadyExistsException e)
         {
+            appUserService.updateAuthProvider(email, clientName);
             log.info("User already exist in database");
         }
         response.sendRedirect("/menu");

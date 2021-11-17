@@ -16,7 +16,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
     private final AppUserService appUserService;
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final OAuth2AuthenticationSuccessHandler authenticationSuccessHandler;
+    private final OAuth2AuthenticationSuccessHandler oAuth2SuccessHandler;
+    private final DatabaseAuthenticationSuccessHandler databaseSuccessHandler;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -42,10 +43,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         http.authorizeRequests().antMatchers("/user/rented-books").hasAuthority("ROLE_USER");
         http.authorizeRequests().antMatchers("/user/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_EMPLOYEE");
         http.authorizeRequests().anyRequest().authenticated();
-        http.formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/menu");
+        http.formLogin().loginPage("/login").usernameParameter("email").successHandler(databaseSuccessHandler);
         http.rememberMe().key("jAAAjyXe0nRSeoMOOXlL0snIWBLfYc7a").tokenValiditySeconds(14 * 24 * 60 * 60);
         http.oauth2Login().loginPage("/login").userInfoEndpoint().userService(customOAuth2UserService)
-                .and().successHandler(authenticationSuccessHandler);
+                .and().successHandler(oAuth2SuccessHandler);
         http.logout().logoutUrl("/logout");
     }
 }

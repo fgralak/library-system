@@ -31,8 +31,11 @@ public class RegistrationService
 
         String token = appUserService.addLocalUser(appUser);
 
-        String link = "http://localhost:8080/registration/confirm?token=" + token;
-        emailService.send(appUser.getUsername(), emailBuilder.buildEmail(appUser.getUsername(), link));
+        if(token != null)
+        {
+            String link = "http://localhost:8080/registration/confirm?token=" + token;
+            emailService.send(appUser.getUsername(), emailBuilder.buildEmail(appUser.getUsername(), link));
+        }
     }
 
     @Transactional

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -40,10 +41,11 @@ public class AppUserService implements UserDetailsService
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
-        AppUser appUser = appUserRepo.findByUsernameAndProvider(username, LOCAL);
-        if(appUser == null)
+        AppUser appUser = appUserRepo.findByUsername(username).orElseThrow(
+                () -> new UserNotFoundException(username));
+        if(appUser.getPassword() == null)
         {
-            throw new UsernameNotFoundException("User cannot be found");
+            throw new BadCredentialsException("Wrong password or authentication provider");
         }
         else
         {
@@ -54,11 +56,17 @@ public class AppUserService implements UserDetailsService
 
     public void addOAuth2User(AppUser user)
     {
-        if(appUserRepo.findByUsernameAndProvider(user.getUsername(), user.getAuthProvider()) != null)
+        if(appUserRepo.findByUsername(user.getUsername()).isPresent())
         {
-            throw new UserAlreadyExistsException(user.getUsername(), user.getAuthProvider());
+            throw new UserAlreadyExistsException(user.getUsername());
         }
         appUserRepo.save(user);
+    }
+
+    public void updateAuthProvider(String username, String clientName)
+    {
+        Provider provider = Provider.valueOf(clientName.toUpperCase());
+        appUserRepo.updateAuthProvider(username, provider);
     }
 
     public String addLocalUser(AppUser user)
@@ -69,10 +77,19 @@ public class AppUserService implements UserDetailsService
             throw new MissingUsernameOrPasswordException();
         }
 
-        AppUser existedUser = appUserRepo.findByUsernameAndProvider(username, LOCAL);
+        AppUser existedUser = getUserByUsername(username);
         if(existedUser != null)
         {
-            if(!existedUser.isEnabled() && existedUser.getUsername().equals(user.getUsername()))
+            if(!existedUser.getAuthProvider().equals(LOCAL))
+            {
+                existedUser.setFirstName(user.getFirstName());
+                existedUser.setLastName(user.getLastName());
+                existedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+                existedUser.setAuthProvider(LOCAL);
+                appUserRepo.save(existedUser);
+                return null;
+            }
+            else if(!existedUser.isEnabled() && existedUser.getUsername().equals(user.getUsername()))
             {
                 existedUser.setPassword(user.getPassword());
                 String token = UUID.randomUUID().toString();
@@ -88,7 +105,7 @@ public class AppUserService implements UserDetailsService
             }
             else
             {
-                throw new UserAlreadyExistsException(username, LOCAL);
+                throw new UserAlreadyExistsException(username);
             }
         }
 
@@ -126,10 +143,23 @@ public class AppUserService implements UserDetailsService
             throw new MissingUsernameOrPasswordException();
         }
 
-        AppUser existedUser = appUserRepo.findByUsernameAndProvider(username, LOCAL);
+        AppUser existedUser = getUserByUsername(username);
         if(existedUser != null)
         {
-            throw new UserAlreadyExistsException(username, LOCAL);
+            if(existedUser.getPassword() != null)
+            {
+                throw new UserAlreadyExistsException(username);
+            }
+            else
+            {
+                existedUser.setFirstName(user.getFirstName());
+                existedUser.setLastName(user.getLastName());
+                existedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+                existedUser.setAuthProvider(LOCAL);
+                appUserRepo.save(existedUser);
+                return;
+            }
+
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));

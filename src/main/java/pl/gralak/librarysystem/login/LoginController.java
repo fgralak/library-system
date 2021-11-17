@@ -1,4 +1,4 @@
-package pl.gralak.librarysystem.controller;
+package pl.gralak.librarysystem.login;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class TemplateController
+public class LoginController
 {
     @GetMapping("/login")
     public String viewLoginPage()
