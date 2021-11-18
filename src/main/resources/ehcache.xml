@@ -1,0 +1,17 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.ehcache.org/v3"
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
+
+    <cache-template name="default">
+        <expiry>
+            <ttl unit="minutes">30</ttl>
+        </expiry>
+        <heap>1000</heap>
+    </cache-template>
+
+    <cache alias="AllBooks" uses-template="default"/>
+    <cache alias="AllBooksAuthor" uses-template="default"/>
+    <cache alias="AllBooksTitle" uses-template="default"/>
+    <cache alias="AllBooksRating" uses-template="default"/>
+
+</config>

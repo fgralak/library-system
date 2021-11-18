@@ -1,9 +1,15 @@
 package pl.gralak.librarysystem.book;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.gralak.librarysystem.exception.*;
+import pl.gralak.librarysystem.exception.BookAlreadyExistsException;
+import pl.gralak.librarysystem.exception.BookNotFoundException;
+import pl.gralak.librarysystem.exception.MissingTitleOrAuthorException;
+import pl.gralak.librarysystem.exception.SomeBooksAreRentedException;
 import pl.gralak.librarysystem.record.Record;
 import pl.gralak.librarysystem.record.RecordRepo;
 
@@ -22,12 +28,14 @@ public class BookServiceImpl implements BookService
     private final RecordRepo recordRepo;
 
     @Override
+    @Cacheable(cacheNames = "AllBooks")
     public List<Book> getAllBooks()
     {
         return bookRepo.findAll();
     }
 
     @Override
+    @Cacheable(cacheNames = "AllBooksAuthor", key="#author")
     public List<Book> getAllBooksWithGivenAuthor(String author)
     {
         if(author == null || author.length() == 0)
@@ -38,6 +46,7 @@ public class BookServiceImpl implements BookService
     }
 
     @Override
+    @Cacheable(cacheNames = "AllBooksTitle", key="#title")
     public List<Book> getAllBooksWithGivenTitle(String title)
     {
         if(title == null || title.length() == 0)
@@ -48,12 +57,19 @@ public class BookServiceImpl implements BookService
     }
 
     @Override
+    @Cacheable(cacheNames = "AllBooksRating", key="#rating")
     public List<Book> getAllBooksWithBetterRating(double rating)
     {
         return bookRepo.findAllWithBetterRating(rating);
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value="AllBooks", allEntries = true),
+            @CacheEvict(value="AllBooksTitle", key="#bookToAdd.title"),
+            @CacheEvict(value="AllBooksAuthor", key="#bookToAdd.author"),
+            @CacheEvict(value="AllBooksRating", key="#bookToAdd.rating")
+            })
     public Book addBook(Book bookToAdd)
     {
         String title = bookToAdd.getTitle();
@@ -83,6 +99,12 @@ public class BookServiceImpl implements BookService
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value="AllBooks", allEntries = true),
+            @CacheEvict(value="AllBooksTitle", key="#bookForUpdate.title"),
+            @CacheEvict(value="AllBooksAuthor", key="#bookForUpdate.author"),
+            @CacheEvict(value="AllBooksRating", key="#bookForUpdate.rating")
+    })
     public Book updateBook(Book bookForUpdate)
     {
         String title = bookForUpdate.getTitle();
@@ -122,7 +144,13 @@ public class BookServiceImpl implements BookService
     }
 
     @Override
-    public void deleteBook(Long id)
+    @Caching(evict = {
+            @CacheEvict(value="AllBooks", allEntries = true),
+            @CacheEvict(value="AllBooksTitle", key="#result.title"),
+            @CacheEvict(value="AllBooksAuthor", key="#result.author"),
+            @CacheEvict(value="AllBooksRating", key="#result.rating")
+    })
+    public Book deleteBook(Long id)
     {
         Book book = bookRepo.findById(id).orElseThrow(() -> new BookNotFoundException(id));
 
@@ -135,5 +163,6 @@ public class BookServiceImpl implements BookService
                 book.getNumberOfBooks(), LocalDate.now()));
 
         bookRepo.deleteById(id);
+        return book;
     }
 }
