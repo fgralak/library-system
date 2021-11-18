@@ -84,6 +84,10 @@ public class BookServiceImpl implements BookService
         {
             throw new BookAlreadyExistsException(title, author);
         }
+        if(bookToAdd.getYear() > LocalDate.now().getYear())
+        {
+            throw new IllegalStateException("Given year is greater than current one");
+        }
 
         recordRepo.save(new Record(ADDED, bookToAdd.getTitle(), bookToAdd.getAuthor(),
                 bookToAdd.getNumberOfBooks(), LocalDate.now()));
@@ -119,6 +123,12 @@ public class BookServiceImpl implements BookService
         {
             throw new BookNotFoundException(title, author);
         }
+
+        if(bookForUpdate.getYear() > LocalDate.now().getYear())
+        {
+            throw new IllegalStateException("Given year is greater than current one");
+        }
+
         bookForUpdate.setId(book.getId());
 
         if((book.getNumberOfBooks() - book.getBooksAvailable()) > bookForUpdate.getNumberOfBooks())

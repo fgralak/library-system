@@ -103,17 +103,22 @@ public class BookController
     @PostMapping("/create")
     public String createNewBook(@ModelAttribute("book") Book book, RedirectAttributes redirectAttributes)
     {
-        try{
+        try
+        {
             bookServiceImpl.addBook(book);
-        } catch(BookAlreadyExistsException e)
+        } catch (BookAlreadyExistsException e)
         {
             redirectAttributes.addFlashAttribute("error",
                     "Book with title: " + book.getTitle() + " and author: " + book.getAuthor() + " already exists");
             return "redirect:/book/create-form";
-        } catch(MissingTitleOrAuthorException e)
+        } catch (MissingTitleOrAuthorException e)
         {
             redirectAttributes.addFlashAttribute("error",
                     "Value of title and/or author was null or empty");
+            return "redirect:/book/create-form";
+        } catch (IllegalStateException e)
+        {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/book/create-form";
         }
         redirectAttributes.addFlashAttribute("success",
@@ -144,6 +149,10 @@ public class BookController
             redirectAttributes.addFlashAttribute("error",
                     "Cannot update book with given id because new number of book was lower than number of rented books");
             return "redirect:/book/manage-books";
+        } catch (IllegalStateException e)
+        {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/book/edit-form/{id}";
         }
 
         redirectAttributes.addFlashAttribute("success",
