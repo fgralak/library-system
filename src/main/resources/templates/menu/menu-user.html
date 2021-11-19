@@ -23,12 +23,14 @@
         <div class="alert alert-success" role="alert" th:text="${success}" th:if="${success}"
              style="max-width:400px; margin:0 auto;"></div>
         <br>
-        <div>
-            <a th:href="@{/user/rented-books}" style="color:Blue; font-size:25px; text-align: center;"> Get List of My Rented Books </a>
+        <div style="color:Blue; font-size:25px; text-align: center;">
+            <img class="img-fluid" th:src="@{/images/my-books-icon.jpg}" width="60" height="60"/>
+            <a th:href="@{/user/rented-books}"> Get List of My Rented Books </a>
         </div>
         <br>
-        <div>
-            <a th:href="@{/book/all}" style="color:Blue; font-size:25px; text-align: center;"> Get List of All Books </a>
+        <div style="color:Blue; font-size:25px; text-align: center;">
+            <img class="img-fluid" th:src="@{/images/all-books-icon.png}" width="60" height="60"/>
+            <a th:href="@{/book/all}"> Get List of All Books </a>
         </div>
         <br>
         <form th:action="@{/book/all-by-title}" method="get" style="max-width: 400px; margin: 0 auto;"

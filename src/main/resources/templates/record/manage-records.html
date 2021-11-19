@@ -18,16 +18,19 @@
         <div class="alert alert-success" align = "center" role="alert" th:text="${success}" th:if="${success}"
              style="max-width: 400px; margin:0 auto;"></div>
         <br>
-        <div>
-            <a th:href="@{/record/all}" style="color:Blue; font-size:25px; text-align: center;"> List of All Records </a>
+        <div style="color:Blue; font-size:25px; text-align: center;">
+            <img class="img-fluid" th:src="@{/images/records-icon.png}" width="60" height="60"/>
+            <a th:href="@{/record/all}"> List of All Records </a>
         </div>
         <br>
-        <div>
-            <a th:href="@{/record/all-added}" style="color:Blue; font-size:25px; text-align: center;"> List of Records with Added Action </a>
+        <div style="color:Blue; font-size:25px; text-align: center;">
+            <img class="img-fluid" th:src="@{/images/record-added.png}" width="60" height="60"/>
+            <a th:href="@{/record/all-added}"> List of Records with Added Action </a>
         </div>
         <br>
-        <div>
-            <a th:href="@{/record/all-deleted}" style="color:Blue; font-size:25px; text-align: center;"> List of Records with Deleted Action </a>
+        <div style="color:Blue; font-size:25px; text-align: center;">
+            <img class="img-fluid" th:src="@{/images/record-deleted.png}" width="60" height="60"/>
+            <a th:href="@{/record/all-deleted}"> List of Records with Deleted Action </a>
         </div>
         <br>
         <form th:action="@{/record/range}" method="get"  style="max-width: 400px; margin: 0 auto;">
